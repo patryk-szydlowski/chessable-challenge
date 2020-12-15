@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import {Box} from "common/components";
-import {PieceColor, PieceType} from "features/piece/types";
+import React from "react"
+import styled from "styled-components"
+import {Box} from "common/components"
+import {PieceColor, PieceType} from "features/piece/types"
 
 const textColor = {
   white: '#FFFFFF',

@@ -1,4 +1,4 @@
-import {PieceDefinition} from "features/piece/types";
+import {PieceDefinition} from "features/piece/types"
 
 export type ChessboardState = {
   chessboardSize: number

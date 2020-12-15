@@ -1,4 +1,4 @@
-import {ChessboardState} from "features/chessboard/types";
+import {ChessboardState} from "features/chessboard/types"
 
 export const initialState: ChessboardState = {
   chessboardSize: 8,

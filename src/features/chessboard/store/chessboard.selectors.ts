@@ -3,7 +3,7 @@ import {
   ChessboardState,
   ChessboardStateSlice,
   TilePosition
-} from "features/chessboard/types";
+} from "features/chessboard/types"
 
 const selectChessboardFeature = (state: ChessboardStateSlice): ChessboardState =>
   state.chessboard

@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import {rangeFromZero} from "common/utils";
-import {ChessboardTileContainer} from "./chessboard-tile-container";
+import React from "react"
+import styled from "styled-components"
+import {rangeFromZero} from "common/utils"
+import {ChessboardTileContainer} from "./chessboard-tile-container"
 
 const StyledChessboard = styled.div<{ size: number }>`
   width: ${props => props.size}px;

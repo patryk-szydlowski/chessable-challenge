@@ -1,7 +1,7 @@
-import React from "react";
+import React from "react"
 import {useSelector} from "react-redux"
-import {selectTilePiece} from "features/chessboard/store";
-import {ChessboardTile} from "./chessboard-tile";
+import {selectTilePiece} from "features/chessboard/store"
+import {ChessboardTile} from "./chessboard-tile"
 
 type Props = {
   row: number

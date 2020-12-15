@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import {Box} from "common/components";
-import {Piece} from "features/piece/components";
-import {PieceDefinition} from "features/piece/types";
+import React from "react"
+import styled from "styled-components"
+import {Box} from "common/components"
+import {Piece} from "features/piece/components"
+import {PieceDefinition} from "features/piece/types"
 
 const TileBackground = styled(Box)<{ position: number }>`
   background-color: ${props => props.position % 2 === 0 ? 'white' : 'black'};
