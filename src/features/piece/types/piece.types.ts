@@ -9,3 +9,8 @@ export type PieceType =
   | "bishop"
   | "knight"
   | "pawn"
+
+export type PieceDefinition = {
+  color: PieceColor
+  type: PieceType
+}
