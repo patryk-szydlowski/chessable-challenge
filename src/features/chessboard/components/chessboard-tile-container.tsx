@@ -1,5 +1,6 @@
 import React from "react";
-import {PieceDefinition} from "features/piece/types";
+import {useSelector} from "react-redux"
+import {selectTilePiece} from "features/chessboard/store";
 import {ChessboardTile} from "./chessboard-tile";
 
 type Props = {
@@ -8,8 +9,9 @@ type Props = {
   size: number
 }
 
-export const ChessboardTileContainer: React.VFC<Props> = (props) => {
-  // todo: get piece from store
-  const piece: PieceDefinition | undefined = undefined
-  return <ChessboardTile {...props} piece={piece}/>
+export const ChessboardTileContainer: React.VFC<Props> = (
+  {row, column, size}
+) => {
+  const piece = useSelector(selectTilePiece)({row, column})
+  return <ChessboardTile row={row} column={column} size={size} piece={piece}/>
 }

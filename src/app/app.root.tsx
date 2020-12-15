@@ -1,12 +1,9 @@
 import React, {FC} from "react";
-import {PieceColor, PieceType} from "features/piece/types";
-import {Chessboard} from "../features/chessboard/components";
-
-const colors: PieceColor[] = ["white", "black"]
-const types: PieceType[] = ["bishop", "king", "knight", "pawn", "queen", "rook"]
+import {ChessboardContainer} from "features/chessboard/components";
+import {AppProvider} from "./app.provider";
 
 export const AppRoot: FC = () => (
-  <div>
-    <Chessboard/>
-  </div>
+  <AppProvider>
+    <ChessboardContainer/>
+  </AppProvider>
 )
