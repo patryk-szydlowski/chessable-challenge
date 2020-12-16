@@ -1,1 +1,1 @@
-export * from "./piece.types"
+export * from "./domain.types"
