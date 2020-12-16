@@ -1,4 +1,4 @@
-import {MoveScenario, PieceColor, PieceMove} from "features/piece/types";
+import {MoveScenario, PieceColor, PieceMove} from "features/piece/types"
 
 export function pawnMoves(pawnColor: PieceColor): PieceMove[] {
   return [

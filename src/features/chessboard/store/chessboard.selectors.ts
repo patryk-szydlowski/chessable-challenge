@@ -4,6 +4,7 @@ import {
   ChessboardStateSlice,
   TilePosition
 } from "features/chessboard/types"
+import {serializePosition} from "features/chessboard/utils"
 
 const selectChessboardFeature = (state: ChessboardStateSlice): ChessboardState =>
   state.chessboard
@@ -13,14 +14,7 @@ export const selectPieces = createSelector(
   ({pieces}) => pieces
 )
 
-export const selectChessboardSize = createSelector(
-  selectChessboardFeature,
-  ({chessboardSize}) => chessboardSize
-)
-
-export const selectTilePiece = createSelector(
+export const selectPieceByPosition = createSelector(
   selectPieces,
-  selectChessboardSize,
-  (pieces, chessboardSize) => ({row, column}: TilePosition) =>
-    pieces.get(row * chessboardSize + column)
+  (pieces) => (position: TilePosition) => pieces.get(serializePosition(position))
 )

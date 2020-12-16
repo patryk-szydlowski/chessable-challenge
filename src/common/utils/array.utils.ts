@@ -6,3 +6,7 @@ export function range(startInclusive: number, endExclusive: number): number[] {
 export function rangeFromZero(endExclusive: number): number[] {
   return range(0, endExclusive)
 }
+
+export function product<A, B>(first: A[], second: B[]): [A, B][] {
+  return first.flatMap(a => second.map<[A, B]>(b => ([a, b])))
+}

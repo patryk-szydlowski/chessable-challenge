@@ -1,8 +1,7 @@
 import {PieceDefinition} from "features/piece/types"
 
 export type ChessboardState = {
-  chessboardSize: number
-  pieces: Map<number, PieceDefinition | undefined>
+  pieces: Map<string, PieceDefinition | undefined>
 }
 
 export type ChessboardStateSlice = {
