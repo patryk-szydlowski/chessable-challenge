@@ -1,6 +1,6 @@
 import {createReducer} from "@reduxjs/toolkit"
 import {Piece, PieceSpecialState} from "features/piece/types"
-import {movePiece, spawnPiece} from "./chessboard.actions"
+import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
 import {initialState} from "./chessboard.state"
 
 export const chessboardReducer = createReducer(initialState, builder => builder
@@ -27,5 +27,16 @@ export const chessboardReducer = createReducer(initialState, builder => builder
     }
 
     pieces.set(piece.id, movedPiece)
+  })
+  .addCase(capturePiece.fulfilled, ({pieces}, action) => {
+    const {piece, capturedPiece} = action.payload
+
+    const movedPiece: Piece = {
+      ...piece,
+      position: capturedPiece.position
+    }
+
+    pieces.set(piece.id, movedPiece)
+    pieces.delete(capturedPiece.id)
   })
 )

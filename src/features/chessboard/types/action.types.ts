@@ -10,3 +10,13 @@ export type MovePiece = {
   piece: Piece
   toPosition: PiecePosition
 }
+
+export type CapturePiece = {
+  piece: Piece
+  capturePosition: PiecePosition
+}
+
+export type CapturedPiece = {
+  piece: Piece
+  capturedPiece: Piece
+}

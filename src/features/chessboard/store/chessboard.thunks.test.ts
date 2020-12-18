@@ -1,7 +1,12 @@
-import {MovePiece, SpawnPiece} from "features/chessboard/types"
+import {
+  CapturedPiece,
+  CapturePiece,
+  MovePiece,
+  SpawnPiece
+} from "features/chessboard/types"
 import {chessboardSlice} from "features/chessboard/utils"
 import {Piece, PieceColor, PiecePosition, PieceType} from "features/piece/types"
-import {movePiece, spawnPiece} from "./chessboard.actions"
+import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
 
 describe('chessboard thunks', () => {
   describe('spawn piece thunk', () => {
@@ -215,6 +220,212 @@ describe('chessboard thunks', () => {
 
       // then
       expect(result.type).toEqual(movePiece.rejected.type)
+      expect(result.payload).toEqual(piecePayload)
+    })
+  })
+
+  describe('capture piece thunk', () => {
+    test('successfully captures piece when target position is occupied by different color', async () => {
+      // given
+      const piece: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 3, y: 3},
+        specialStates: new Set()
+      }
+
+      const pieceToCapture: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 4, y: 4},
+        specialStates: new Set()
+      }
+
+      const state = chessboardSlice({
+        pieces: new Map([
+          [piece.id, piece],
+          [pieceToCapture.id, pieceToCapture]
+        ])
+      })
+
+      const piecePayload: CapturePiece = {
+        piece,
+        capturePosition: pieceToCapture.position
+      }
+
+      const expectedPayload: CapturedPiece = {
+        piece,
+        capturedPiece: pieceToCapture
+      }
+
+      const thunk = capturePiece(piecePayload)
+
+      // when
+      const result = await thunk(jest.fn(), () => state, undefined)
+
+      // then
+      expect(result.type).toEqual(capturePiece.fulfilled.type)
+      expect(result.payload).toEqual(expectedPayload)
+    })
+
+    test('rejects piece capture when target position is not occupied', async () => {
+      // given
+      const piece: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 3, y: 3},
+        specialStates: new Set()
+      }
+
+      const existingPiece: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 4, y: 4},
+        specialStates: new Set()
+      }
+
+      const state = chessboardSlice({
+        pieces: new Map([
+          [piece.id, piece],
+          [existingPiece.id, existingPiece]
+        ])
+      })
+
+      const piecePayload: CapturePiece = {
+        piece,
+        capturePosition: {x: 2, y: 2}
+      }
+
+      const thunk = capturePiece(piecePayload)
+
+      // when
+      const result = await thunk(jest.fn(), () => state, undefined)
+
+      // then
+      expect(result.type).toEqual(capturePiece.rejected.type)
+      expect(result.payload).toEqual(piecePayload)
+    })
+
+    test('rejects piece capture when target position is occupied by same color', async () => {
+      // given
+      const piece: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 3, y: 3},
+        specialStates: new Set()
+      }
+
+      const pieceToCapture: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 4, y: 4},
+        specialStates: new Set()
+      }
+
+      const state = chessboardSlice({
+        pieces: new Map([
+          [piece.id, piece],
+          [pieceToCapture.id, pieceToCapture]
+        ])
+      })
+
+      const piecePayload: CapturePiece = {
+        piece,
+        capturePosition: pieceToCapture.position
+      }
+
+      const thunk = capturePiece(piecePayload)
+
+      // when
+      const result = await thunk(jest.fn(), () => state, undefined)
+
+      // then
+      expect(result.type).toEqual(capturePiece.rejected.type)
+      expect(result.payload).toEqual(piecePayload)
+    })
+
+    test('rejects piece capture when move is not legal', async () => {
+      // given
+      const piece: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 3, y: 3},
+        specialStates: new Set()
+      }
+
+      const pieceToCapture: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 5, y: 4},
+        specialStates: new Set()
+      }
+
+      const state = chessboardSlice({
+        pieces: new Map([
+          [piece.id, piece],
+          [pieceToCapture.id, pieceToCapture]
+        ])
+      })
+
+      const piecePayload: CapturePiece = {
+        piece,
+        capturePosition: pieceToCapture.position
+      }
+
+      const thunk = capturePiece(piecePayload)
+
+      // when
+      const result = await thunk(jest.fn(), () => state, undefined)
+
+      // then
+      expect(result.type).toEqual(capturePiece.rejected.type)
+      expect(result.payload).toEqual(piecePayload)
+    })
+
+    test('rejects piece capture when piece does not exist on the chessboard', async () => {
+      // given
+      const piece: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 3, y: 3},
+        specialStates: new Set()
+      }
+
+      const existingPiece: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 4, y: 4},
+        specialStates: new Set()
+      }
+
+      const state = chessboardSlice({
+        pieces: new Map([
+          [existingPiece.id, existingPiece]
+        ])
+      })
+
+      const piecePayload: CapturePiece = {
+        piece,
+        capturePosition: {x: 2, y: 2}
+      }
+
+      const thunk = capturePiece(piecePayload)
+
+      // when
+      const result = await thunk(jest.fn(), () => state, undefined)
+
+      // then
+      expect(result.type).toEqual(capturePiece.rejected.type)
       expect(result.payload).toEqual(piecePayload)
     })
   })

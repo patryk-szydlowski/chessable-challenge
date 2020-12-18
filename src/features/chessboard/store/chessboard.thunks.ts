@@ -1,4 +1,6 @@
 import {
+  CapturedPiece,
+  CapturePiece,
   ChessboardThunk,
   MovePiece,
   SpawnPiece,
@@ -13,6 +15,7 @@ import {
 import {
   selectBoardSize,
   selectPieceById,
+  selectPieceByPosition,
   selectTileOccupation
 } from "./chessboard.selectors"
 
@@ -49,4 +52,26 @@ export const movePieceThunk: ChessboardThunk<MovePiece, MovePiece> =
     && isLegalPieceMove(piece, move, boardSize)
       ? movePiece
       : rejectWithValue(movePiece)
+  }
+
+export const capturePieceThunk: ChessboardThunk<CapturedPiece, CapturePiece> =
+  (capturePiece, {getState, rejectWithValue}) => {
+    const {piece, capturePosition} = capturePiece
+    const state = getState()
+    const boardSize = selectBoardSize(state)
+    const pieceToCapture = selectPieceByPosition(state)(capturePosition)
+    const pieceExists = !!selectPieceById(state)(piece.id)
+
+    const move: PieceMove = {
+      xOffset: capturePosition.x - piece.position.x,
+      yOffset: capturePosition.y - piece.position.y,
+      scenario: PieceMoveScenario.CAPTURE
+    }
+
+    return pieceExists
+    && !!pieceToCapture
+    && piece.color !== pieceToCapture.color
+    && isLegalPieceMove(piece, move, boardSize)
+      ? {piece, capturedPiece: pieceToCapture}
+      : rejectWithValue(capturePiece)
   }
