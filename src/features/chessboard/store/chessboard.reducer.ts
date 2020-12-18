@@ -1,16 +1,31 @@
 import {createReducer} from "@reduxjs/toolkit"
-import {serializePosition} from "features/chessboard/utils"
+import {Piece, PieceSpecialState} from "features/piece/types"
 import {movePiece, spawnPiece} from "./chessboard.actions"
 import {initialState} from "./chessboard.state"
 
 export const chessboardReducer = createReducer(initialState, builder => builder
   .addCase(spawnPiece.fulfilled, ({pieces}, action) => {
-    const {piece, position} = action.payload
-    pieces.set(serializePosition(position), piece)
+    const {payload: piecePayload} = action
+    const pieceId = Math.max(-1, ...pieces.keys()) + 1
+    const piece: Piece = {
+      ...piecePayload,
+      id: pieceId,
+      specialStates: new Set([PieceSpecialState.FIRST_MOVE])
+    }
+    pieces.set(pieceId, piece)
   })
   .addCase(movePiece.fulfilled, ({pieces}, action) => {
-    const {piece, fromPosition, toPosition} = action.payload
-    pieces.delete(serializePosition(fromPosition))
-    pieces.set(serializePosition(toPosition), piece)
+    const {piece, toPosition} = action.payload
+
+    const updatedStates = new Set([...piece.specialStates])
+    updatedStates.delete(PieceSpecialState.FIRST_MOVE)
+
+    const movedPiece: Piece = {
+      ...piece,
+      position: toPosition,
+      specialStates: updatedStates
+    }
+
+    pieces.set(piece.id, movedPiece)
   })
 )
