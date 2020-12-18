@@ -1,41 +1,39 @@
-import {containsSome} from "common/utils";
 import {
-  MoveScenario,
-  PieceDefinition,
+  LegalPieceMove,
+  Piece,
+  PieceColor,
   PieceMove,
-  PiecePosition,
   PieceType
 } from "features/piece/types"
-import {pawnMoves} from "./pawn.moves"
+import {pawnMovesByColor} from "./pawn.moves"
 
-// todo: for now it's only pawn moves since this challenge only works with pawns
-export function pieceMoves(piece: PieceDefinition): PieceMove[] {
-  switch (piece.type) {
-    case PieceType.PAWN:
-      return pawnMoves(piece)
-    default:
-      return []
-  }
+const pieceMovesByType = new Map<PieceType, Map<PieceColor, LegalPieceMove[]>>([
+  [PieceType.PAWN, pawnMovesByColor]
+])
+
+export function isLegalPieceMove(piece: Piece, move: PieceMove, boardSize: number): boolean {
+  const {type, color} = piece
+  const legalMoves = legalPieceMoves(type, color)
+  return isMoveLegal(move, legalMoves) && isMoveWithinBoard(piece, move, boardSize)
 }
 
-export function toMove(
-  from: PiecePosition,
-  to: PiecePosition,
-  scenarios: Set<MoveScenario>
-): PieceMove {
-  return {
-    xOffset: from.column - to.column,
-    yOffset: from.row - to.row,
-    scenarios
-  }
+function legalPieceMoves(type: PieceType, color: PieceColor) {
+  return pieceMovesByType.get(type)?.get(color) ?? []
 }
 
-export function isLegalMove(move: PieceMove, piece: PieceDefinition): boolean {
-  return pieceMoves(piece).some(matchesLegalMove(move))
+function isMoveLegal(move: PieceMove, legalMoves: LegalPieceMove[]): boolean {
+  return legalMoves.some(moveIsAllowed(move))
 }
 
-function matchesLegalMove(move: PieceMove): (legalMove: PieceMove) => boolean {
+function moveIsAllowed(move: PieceMove): (legalMove: LegalPieceMove) => boolean {
   return legalMove => legalMove.xOffset === move.xOffset
     && legalMove.yOffset === move.yOffset
-    && containsSome(legalMove.scenarios, move.scenarios)
+    && legalMove.legalScenarios.has(move.scenario)
+}
+
+function isMoveWithinBoard(piece: Piece, move: PieceMove, boardSize: number): boolean {
+  const {position: {x, y}} = piece
+  const {xOffset, yOffset} = move
+  return x + xOffset >= 0 && x + xOffset < boardSize
+    && y + yOffset >= 0 && y + yOffset < boardSize
 }

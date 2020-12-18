@@ -1,58 +1,47 @@
 import {
-  MoveScenario,
+  LegalPieceMove,
   PieceColor,
-  PieceDefinition,
-  PieceMove
+  PieceMoveScenario
 } from "features/piece/types"
 
-export function pawnMoves({color, moved}: PieceDefinition): PieceMove[] {
-  return [
-    standardMove(color),
-    ...possibleFirstMove(color, moved),
-    ...captureMoves(color)
-  ]
+const firstMove: LegalPieceMove = {
+  xOffset: 0,
+  yOffset: 1,
+  legalScenarios: new Set([PieceMoveScenario.MOVE, PieceMoveScenario.FIRST_MOVE])
 }
 
-function standardMove(pawnColor: PieceColor): PieceMove {
-  return {
-    xOffset: 0,
-    yOffset: multiplyByColor(1, pawnColor),
-    scenarios: new Set([MoveScenario.MOVE, MoveScenario.FIRST_MOVE])
-  }
+const move: LegalPieceMove = {
+  xOffset: 0,
+  yOffset: 2,
+  legalScenarios: new Set([PieceMoveScenario.FIRST_MOVE])
 }
 
-function possibleFirstMove(pawnColor: PieceColor, moved?: boolean): PieceMove[] {
-  return moved ? [] : [firstMove(pawnColor)]
+const rightSideCapture: LegalPieceMove = {
+  xOffset: 1,
+  yOffset: 1,
+  legalScenarios: new Set([PieceMoveScenario.CAPTURE])
 }
 
-function firstMove(pawnColor: PieceColor): PieceMove {
-  return {
-    xOffset: 0,
-    yOffset: multiplyByColor(2, pawnColor),
-    scenarios: new Set([MoveScenario.FIRST_MOVE])
-  }
+const leftSideCapture: LegalPieceMove = {
+  xOffset: -1,
+  yOffset: 1,
+  legalScenarios: new Set([PieceMoveScenario.CAPTURE])
 }
 
-function captureMoves(pawnColor: PieceColor): PieceMove[] {
-  return [
-    {
-      xOffset: -1,
-      yOffset: multiplyByColor(1, pawnColor),
-      scenarios: new Set([MoveScenario.CAPTURE])
-    },
-    {
-      xOffset: 1,
-      yOffset: multiplyByColor(1, pawnColor),
-      scenarios: new Set([MoveScenario.CAPTURE])
-    },
-  ]
-}
+const pawnMoves = [firstMove, move, rightSideCapture, leftSideCapture]
 
-function multiplyByColor(offset: number, pawnColor: PieceColor): number {
-  switch (pawnColor) {
-    case PieceColor.WHITE:
-      return offset
-    case PieceColor.BLACK:
-      return -offset
+export const pawnMovesByColor = new Map<PieceColor, LegalPieceMove[]>([
+  [PieceColor.WHITE, pawnMoves.map(offsetByPawnColor(PieceColor.WHITE))],
+  [PieceColor.BLACK, pawnMoves.map(offsetByPawnColor(PieceColor.BLACK))],
+])
+
+function offsetByPawnColor(color: PieceColor): (move: LegalPieceMove) => LegalPieceMove {
+  return move => {
+    switch (color) {
+      case PieceColor.WHITE:
+        return move
+      case PieceColor.BLACK:
+        return {...move, yOffset: -move.yOffset}
+    }
   }
 }

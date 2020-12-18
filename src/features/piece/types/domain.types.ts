@@ -1,36 +1,45 @@
 export enum PieceColor {
   WHITE = "white",
-  BLACK = "black",
+  BLACK = "black"
 }
 
 export enum PieceType {
-  KING = "king",
-  QUEEN = "queen",
-  ROOK = "rook",
-  BISHOP = "bishop",
-  KNIGHT = "knight",
-  PAWN = "pawn",
+  PAWN = "pawn"
 }
 
-export type PieceDefinition = {
-  color: PieceColor
+export enum PieceSpecialState {
+  FIRST_MOVE = "first-move"
+}
+
+export type PiecePosition = {
+  x: number
+  y: number
+}
+
+export type PieceId = number
+
+export type Piece = {
+  id: PieceId
   type: PieceType
-  moved?: boolean
+  color: PieceColor
+  position: PiecePosition
+  specialStates: Set<PieceSpecialState>
 }
 
-export enum MoveScenario {
+export enum PieceMoveScenario {
   MOVE = "move",
   FIRST_MOVE = "first-move",
-  CAPTURE = "capture",
+  CAPTURE = "capture"
 }
 
 export type PieceMove = {
   xOffset: number
   yOffset: number
-  scenarios: Set<MoveScenario>
+  scenario: PieceMoveScenario
 }
 
-export type PiecePosition = {
-  row: number
-  column: number
+export type LegalPieceMove = {
+  xOffset: number
+  yOffset: number
+  legalScenarios: Set<PieceMoveScenario>
 }
