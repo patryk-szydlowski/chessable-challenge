@@ -1,12 +1,17 @@
 import {ChessboardState} from "features/chessboard/types"
-import {serializePosition} from "features/chessboard/utils"
-import {PieceColor, PieceType} from "features/piece/types"
+import {Piece, PieceColor, PieceId, PieceType} from "features/piece/types"
+
+const initialPieceId: PieceId = 0
+
+const initialPiece: Piece = {
+  id: initialPieceId,
+  type: PieceType.PAWN,
+  color: PieceColor.BLACK,
+  position: {x: 2, y: 7},
+  specialStates: new Set()
+}
 
 export const initialState: ChessboardState = {
-  pieces: new Map([
-    [
-      serializePosition({row: 1, column: 2}),
-      {type: PieceType.PAWN, color: PieceColor.BLACK}
-    ],
-  ])
+  boardSize: 8,
+  pieces: new Map([[initialPieceId, initialPiece]])
 }

@@ -1,7 +1,8 @@
-import {PieceDefinition} from "features/piece/types"
+import {Piece, PieceId} from "features/piece/types"
 
 export type ChessboardState = {
-  pieces: Map<string, PieceDefinition | undefined>
+  boardSize: number,
+  pieces: Map<PieceId, Piece>
 }
 
 export type ChessboardStateSlice = {

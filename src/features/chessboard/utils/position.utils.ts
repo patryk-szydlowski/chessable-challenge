@@ -1,5 +1,5 @@
-import {TilePosition} from "features/chessboard/types"
+import {PiecePosition} from "features/piece/types";
 
-export function serializePosition({row, column}: TilePosition): string {
-  return `${row}-${column}`
+export function serializePosition({x, y}: PiecePosition): string {
+  return `${x}-${y}`
 }
