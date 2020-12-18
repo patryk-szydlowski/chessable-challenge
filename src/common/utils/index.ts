@@ -1,1 +1,1 @@
-export * from "./array.utils"
+export * from "./collection.utils"

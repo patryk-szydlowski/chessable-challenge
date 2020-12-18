@@ -1,10 +1,15 @@
-import {MoveScenario, PieceColor, PieceMove} from "features/piece/types"
+import {
+  MoveScenario,
+  PieceColor,
+  PieceDefinition,
+  PieceMove
+} from "features/piece/types"
 
-export function pawnMoves(pawnColor: PieceColor): PieceMove[] {
+export function pawnMoves({color, moved}: PieceDefinition): PieceMove[] {
   return [
-    standardMove(pawnColor),
-    firstMove(pawnColor),
-    ...captureMoves(pawnColor)
+    standardMove(color),
+    ...possibleFirstMove(color, moved),
+    ...captureMoves(color)
   ]
 }
 
@@ -12,15 +17,19 @@ function standardMove(pawnColor: PieceColor): PieceMove {
   return {
     xOffset: 0,
     yOffset: multiplyByColor(1, pawnColor),
-    scenarios: [MoveScenario.NON_CAPTURE_ONLY]
+    scenarios: new Set([MoveScenario.MOVE, MoveScenario.FIRST_MOVE])
   }
+}
+
+function possibleFirstMove(pawnColor: PieceColor, moved?: boolean): PieceMove[] {
+  return moved ? [] : [firstMove(pawnColor)]
 }
 
 function firstMove(pawnColor: PieceColor): PieceMove {
   return {
     xOffset: 0,
     yOffset: multiplyByColor(2, pawnColor),
-    scenarios: [MoveScenario.NON_CAPTURE_ONLY, MoveScenario.FIRST_MOVE_ONLY]
+    scenarios: new Set([MoveScenario.FIRST_MOVE])
   }
 }
 
@@ -29,12 +38,12 @@ function captureMoves(pawnColor: PieceColor): PieceMove[] {
     {
       xOffset: -1,
       yOffset: multiplyByColor(1, pawnColor),
-      scenarios: [MoveScenario.CAPTURE_ONLY]
+      scenarios: new Set([MoveScenario.CAPTURE])
     },
     {
       xOffset: 1,
       yOffset: multiplyByColor(1, pawnColor),
-      scenarios: [MoveScenario.CAPTURE_ONLY]
+      scenarios: new Set([MoveScenario.CAPTURE])
     },
   ]
 }
