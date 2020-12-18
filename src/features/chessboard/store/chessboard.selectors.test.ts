@@ -3,6 +3,7 @@ import {chessboardSlice} from "features/chessboard/utils"
 import {Piece, PieceColor, PieceId, PieceType} from "features/piece/types"
 import {
   selectBoardSize,
+  selectNextAvailablePieceId,
   selectPieceById,
   selectPieceByPosition,
   selectPiecesById,
@@ -234,6 +235,36 @@ describe('chessboard selectors', () => {
 
       // expect
       expect(selectTileOccupation(state)(position)).toEqual(TileOccupation.EMPTY)
+    })
+  })
+
+  describe('next available piece id selector', () => {
+    test('returns next available piece id', () => {
+      // given
+      const existingPiece: Piece = {
+        id: 10,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 2, y: 0},
+        specialStates: new Set()
+      }
+
+      const pieces = new Map<PieceId, Piece>([
+        [existingPiece.id, existingPiece],
+      ])
+
+      const state = chessboardSlice({pieces})
+
+      // expect
+      expect(selectNextAvailablePieceId(state)).toEqual(existingPiece.id + 1)
+    })
+
+    test('returns next available piece id when no pieces exist', () => {
+      // given
+      const state = chessboardSlice({})
+
+      // expect
+      expect(selectNextAvailablePieceId(state)).toEqual(1)
     })
   })
 })

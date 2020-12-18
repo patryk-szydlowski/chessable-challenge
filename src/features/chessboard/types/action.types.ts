@@ -1,13 +1,12 @@
-import {PieceDefinition} from "features/piece/types"
-import {TilePosition} from "./domain.types"
+import {Piece, PieceColor, PiecePosition, PieceType} from "features/piece/types"
 
 export type SpawnPiece = {
-  piece: PieceDefinition
-  position: TilePosition
+  type: PieceType
+  color: PieceColor
+  position: PiecePosition
 }
 
 export type MovePiece = {
-  piece: PieceDefinition
-  fromPosition: TilePosition
-  toPosition: TilePosition
+  piece: Piece
+  toPosition: PiecePosition
 }

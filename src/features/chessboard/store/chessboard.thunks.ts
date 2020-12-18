@@ -1,27 +1,52 @@
-import {ChessboardThunk, MovePiece, SpawnPiece} from "features/chessboard/types"
-import {isLegalMove, toMove} from "features/piece/moves";
-import {MoveScenario} from "features/piece/types";
-import {selectTileNotOccupied} from "./chessboard.selectors"
+import {
+  ChessboardThunk,
+  MovePiece,
+  SpawnPiece,
+  TileOccupation
+} from "features/chessboard/types"
+import {isLegalPieceMove} from "features/piece/moves"
+import {
+  PieceMove,
+  PieceMoveScenario,
+  PieceSpecialState
+} from "features/piece/types";
+import {
+  selectBoardSize,
+  selectPieceById,
+  selectTileOccupation
+} from "./chessboard.selectors"
+
 
 export const spawnPieceThunk: ChessboardThunk<SpawnPiece, SpawnPiece> =
   (spawnPiece, {getState, rejectWithValue}) => {
     const {position} = spawnPiece
-    const tileNotOccupied = selectTileNotOccupied(getState())(position)
-    return tileNotOccupied
+    const state = getState()
+    const tileOccupation = selectTileOccupation(state)(position)
+
+    return tileOccupation === TileOccupation.EMPTY
       ? spawnPiece
-      : rejectWithValue(spawnPiece)
+      : rejectWithValue(spawnPiece);
   }
 
 export const movePieceThunk: ChessboardThunk<MovePiece, MovePiece> =
   (movePiece, {getState, rejectWithValue}) => {
-    const {piece, fromPosition, toPosition} = movePiece
-    const moveScenarios = new Set([MoveScenario.MOVE])
-    const pieceMove = toMove(fromPosition, toPosition, moveScenarios)
+    const {piece, toPosition} = movePiece
+    const state = getState()
+    const boardSize = selectBoardSize(state)
+    const tileOccupation = selectTileOccupation(state)(toPosition)
+    const pieceExists = !!selectPieceById(state)(piece.id)
 
-    const isPieceMoveLegal = isLegalMove(pieceMove, piece)
-    const moveTileNotOccupied = selectTileNotOccupied(getState())(toPosition)
+    const move: PieceMove = {
+      xOffset: toPosition.x - piece.position.x,
+      yOffset: toPosition.y - piece.position.y,
+      scenario: piece.specialStates.has(PieceSpecialState.FIRST_MOVE)
+        ? PieceMoveScenario.FIRST_MOVE
+        : PieceMoveScenario.MOVE
+    }
 
-    return isPieceMoveLegal && moveTileNotOccupied
+    return pieceExists
+    && tileOccupation === TileOccupation.EMPTY
+    && isLegalPieceMove(piece, move, boardSize)
       ? movePiece
       : rejectWithValue(movePiece)
   }

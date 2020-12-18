@@ -53,3 +53,8 @@ export const selectTileOccupation = createSelector(
     return TileOccupation.EMPTY
   }
 )
+
+export const selectNextAvailablePieceId = createSelector(
+  selectPiecesById,
+  (pieces) => Math.max(0, ...pieces.keys()) + 1
+)
