@@ -1,11 +1,11 @@
 import React from "react"
 import styled from "styled-components"
 import {Box} from "common/components"
-import {Piece} from "features/piece/components"
-import {PieceDefinition} from "features/piece/types"
+import {Piece as PieceComponent} from "features/piece/components"
+import {Piece} from "features/piece/types"
 
 const TileBackground = styled(Box)<{ position: number }>`
-  background-color: ${props => props.position % 2 === 0 ? 'white' : 'black'};
+  background-color: ${props => props.position % 2 === 0 ? 'black' : 'white'};
   position: relative;
 `
 
@@ -21,7 +21,7 @@ type Props = {
   row: number
   column: number
   size: number
-  piece?: PieceDefinition
+  piece?: Piece
 }
 
 export const ChessboardTile: React.VFC<Props> = (
@@ -30,7 +30,7 @@ export const ChessboardTile: React.VFC<Props> = (
   <TileBackground position={row + column} size={size}>
     {piece && (
       <TilePieceContainer>
-        <Piece
+        <PieceComponent
           color={piece.color}
           type={piece.type}
           size={size}

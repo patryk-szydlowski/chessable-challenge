@@ -1,10 +1,7 @@
 import React from "react"
 import styled from "styled-components"
-import {
-  CHESSBOARD_SIZE,
-  CHESSBOARD_TILES,
-  TILE_SIZE
-} from "features/chessboard/utils"
+import {product, rangeFromZero} from "common/utils";
+import {TILE_SIZE} from "features/chessboard/utils"
 import {ChessboardTileContainer} from "./chessboard-tile-container"
 
 const StyledChessboard = styled.div<{ size: number }>`
@@ -13,13 +10,20 @@ const StyledChessboard = styled.div<{ size: number }>`
 
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
 `
 
-export const Chessboard: React.VFC = () => (
-  <StyledChessboard size={TILE_SIZE * CHESSBOARD_SIZE}>
-    {CHESSBOARD_TILES.map(([row, column]) => (
-      <ChessboardTileContainer row={row} column={column} size={TILE_SIZE}/>
-    ))}
-  </StyledChessboard>
-)
+type Props = {
+  boardSize: number
+}
+
+export const Chessboard: React.VFC<Props> = ({boardSize}) => {
+  const chessboardTiles = product(rangeFromZero(boardSize), rangeFromZero(boardSize))
+  return (
+    <StyledChessboard size={TILE_SIZE * boardSize}>
+      {chessboardTiles.map(([row, column]) => (
+        <ChessboardTileContainer row={row} column={column} size={TILE_SIZE}/>
+      ))}
+    </StyledChessboard>
+  );
+}

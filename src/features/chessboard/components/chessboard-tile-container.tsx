@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const ChessboardTileContainer: React.VFC<Props> = (props) => {
-  const {row, column} = props
-  const piece = useSelector(selectPieceByPosition)({row, column})
+  const {column: x, row: y} = props
+  const piece = useSelector(selectPieceByPosition)({x, y})
   return <ChessboardTile {...props} piece={piece}/>
 }

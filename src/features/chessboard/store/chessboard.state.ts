@@ -7,7 +7,7 @@ const initialPiece: Piece = {
   id: initialPieceId,
   type: PieceType.PAWN,
   color: PieceColor.BLACK,
-  position: {x: 2, y: 7},
+  position: {x: 2, y: 6},
   specialStates: new Set()
 }
 
