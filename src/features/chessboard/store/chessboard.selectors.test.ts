@@ -1,3 +1,4 @@
+import {TileOccupation} from "features/chessboard/types"
 import {chessboardSlice} from "features/chessboard/utils"
 import {Piece, PieceColor, PieceId, PieceType} from "features/piece/types"
 import {
@@ -8,7 +9,6 @@ import {
   selectPiecesByPosition,
   selectTileOccupation
 } from "./chessboard.selectors"
-import {TileOccupation} from "../types";
 
 describe('chessboard selectors', () => {
   describe('board size selector', () => {
