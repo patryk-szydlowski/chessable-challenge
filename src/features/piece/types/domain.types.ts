@@ -1,3 +1,5 @@
+import {Set} from "immutable"
+
 export enum PieceColor {
   WHITE = "white",
   BLACK = "black"

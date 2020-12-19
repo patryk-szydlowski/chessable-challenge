@@ -1,3 +1,4 @@
+import {Map, Set} from "immutable"
 import {
   LegalPieceMove,
   PieceColor,
@@ -7,30 +8,30 @@ import {
 const firstMove: LegalPieceMove = {
   xOffset: 0,
   yOffset: 1,
-  legalScenarios: new Set([PieceMoveScenario.MOVE, PieceMoveScenario.FIRST_MOVE])
+  legalScenarios: Set([PieceMoveScenario.MOVE, PieceMoveScenario.FIRST_MOVE])
 }
 
 const move: LegalPieceMove = {
   xOffset: 0,
   yOffset: 2,
-  legalScenarios: new Set([PieceMoveScenario.FIRST_MOVE])
+  legalScenarios: Set([PieceMoveScenario.FIRST_MOVE])
 }
 
 const rightSideCapture: LegalPieceMove = {
   xOffset: 1,
   yOffset: 1,
-  legalScenarios: new Set([PieceMoveScenario.CAPTURE])
+  legalScenarios: Set([PieceMoveScenario.CAPTURE])
 }
 
 const leftSideCapture: LegalPieceMove = {
   xOffset: -1,
   yOffset: 1,
-  legalScenarios: new Set([PieceMoveScenario.CAPTURE])
+  legalScenarios: Set([PieceMoveScenario.CAPTURE])
 }
 
 const pawnMoves = [firstMove, move, rightSideCapture, leftSideCapture]
 
-export const pawnMovesByColor = new Map<PieceColor, LegalPieceMove[]>([
+export const pawnMovesByColor = Map([
   [PieceColor.WHITE, pawnMoves.map(offsetByPawnColor(PieceColor.WHITE))],
   [PieceColor.BLACK, pawnMoves.map(offsetByPawnColor(PieceColor.BLACK))],
 ])

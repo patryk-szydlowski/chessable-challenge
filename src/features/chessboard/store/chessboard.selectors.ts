@@ -1,14 +1,9 @@
-import {createSelector} from "@reduxjs/toolkit"
-import {
-  ChessboardState,
-  ChessboardStateSlice,
-  TileOccupation
-} from "features/chessboard/types"
-import {serializePosition} from "features/chessboard/utils";
-import {PieceColor, PieceId, PiecePosition} from "features/piece/types";
+import {createSelector} from "reselect"
+import {ChessboardStateSlice, TileOccupation} from "features/chessboard/types"
+import {serializePosition} from "features/chessboard/utils"
+import {PieceColor, PieceId, PiecePosition} from "features/piece/types"
 
-const selectChessboardFeature = (state: ChessboardStateSlice): ChessboardState =>
-  state.chessboard
+const selectChessboardFeature = (state: ChessboardStateSlice) => state.chessboard
 
 export const selectBoardSize = createSelector(
   selectChessboardFeature,
@@ -22,9 +17,7 @@ export const selectPiecesById = createSelector(
 
 export const selectPiecesByPosition = createSelector(
   selectPiecesById,
-  (piecesById) => new Map(
-    [...piecesById.values()].map(piece => ([serializePosition(piece.position), piece]))
-  )
+  (piecesById) => piecesById.mapKeys((_, {position}) => serializePosition(position))
 )
 
 export const selectPieceById = createSelector(

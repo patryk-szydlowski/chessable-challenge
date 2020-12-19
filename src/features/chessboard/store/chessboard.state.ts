@@ -1,3 +1,4 @@
+import {Map, Set} from "immutable"
 import {ChessboardState} from "features/chessboard/types"
 import {Piece, PieceColor, PieceId, PieceType} from "features/piece/types"
 
@@ -8,10 +9,10 @@ const initialPiece: Piece = {
   type: PieceType.PAWN,
   color: PieceColor.BLACK,
   position: {x: 2, y: 6},
-  specialStates: new Set()
+  specialStates: Set()
 }
 
 export const initialState: ChessboardState = {
   boardSize: 8,
-  pieces: new Map([[initialPieceId, initialPiece]])
+  pieces: Map([[initialPieceId, initialPiece]])
 }

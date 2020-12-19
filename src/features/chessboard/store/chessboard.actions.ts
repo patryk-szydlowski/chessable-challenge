@@ -1,12 +1,28 @@
-import {createAsyncThunk} from "@reduxjs/toolkit"
+import {createAsyncAction} from "typesafe-actions"
 import {
-  capturePieceThunk,
-  moveOrCapturePieceThunk,
-  movePieceThunk,
-  spawnPieceThunk
-} from "./chessboard.thunks"
+  CapturedPiece,
+  CapturePiece,
+  ChessboardError,
+  MovedPiece,
+  MovePiece,
+  SpawnedPiece,
+  SpawnPiece
+} from "features/chessboard/types"
 
-export const spawnPiece = createAsyncThunk('@chessboard/spawn-piece', spawnPieceThunk)
-export const moveOrCapturePiece = createAsyncThunk('@chessboard/move-or-capture-piece', moveOrCapturePieceThunk)
-export const movePiece = createAsyncThunk('@chessboard/move-piece', movePieceThunk)
-export const capturePiece = createAsyncThunk('@chessboard/capture-piece', capturePieceThunk)
+export const spawnPiece = createAsyncAction(
+  '@chessboard/spawn-piece/request',
+  '@chessboard/spawn-piece/success',
+  '@chessboard/spawn-piece/failure',
+)<SpawnPiece, SpawnedPiece, ChessboardError>()
+
+export const movePiece = createAsyncAction(
+  '@chessboard/move-piece/request',
+  '@chessboard/move-piece/success',
+  '@chessboard/move-piece/failure',
+)<MovePiece, MovedPiece, ChessboardError>()
+
+export const capturePiece = createAsyncAction(
+  '@chessboard/capture-piece/request',
+  '@chessboard/capture-piece/success',
+  '@chessboard/capture-piece/failure',
+)<CapturePiece, CapturedPiece, ChessboardError>()

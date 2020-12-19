@@ -1,6 +1,7 @@
+import {Map, Set} from "immutable"
 import {TileOccupation} from "features/chessboard/types"
 import {chessboardSlice} from "features/chessboard/utils"
-import {Piece, PieceColor, PieceId, PieceType} from "features/piece/types"
+import {Piece, PieceColor, PieceType} from "features/piece/types"
 import {
   selectBoardSize,
   selectNextAvailablePieceId,
@@ -32,7 +33,7 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
       const secondPiece: Piece = {
@@ -40,10 +41,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 1, y: 7},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [firstPiece.id, firstPiece],
         [secondPiece.id, secondPiece],
       ])
@@ -63,7 +64,7 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
       const secondPiece: Piece = {
@@ -71,17 +72,17 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 1, y: 7},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [firstPiece.id, firstPiece],
         [secondPiece.id, secondPiece],
       ])
 
-      const expectedPiecesByPosition = new Map<string, Piece>([
-        ['2-0', firstPiece],
-        ['1-7', secondPiece],
+      const expectedPiecesByPosition = Map([
+        [{x: 2, y: 0}, firstPiece],
+        [{x: 1, y: 7}, secondPiece],
       ])
 
       const state = chessboardSlice({pieces})
@@ -99,10 +100,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [matchingPiece.id, matchingPiece],
       ])
 
@@ -119,10 +120,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [notMatchingPiece.id, notMatchingPiece],
       ])
 
@@ -141,10 +142,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [firstPiece.id, firstPiece],
       ])
 
@@ -161,10 +162,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 2, y: 5},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [notMatchingPiece.id, notMatchingPiece],
       ])
 
@@ -183,10 +184,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [occupyingPiece.id, occupyingPiece],
       ])
 
@@ -203,10 +204,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.BLACK,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [occupyingPiece.id, occupyingPiece],
       ])
 
@@ -224,10 +225,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.BLACK,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [notOccupyingPiece.id, notOccupyingPiece],
       ])
 
@@ -246,10 +247,10 @@ describe('chessboard selectors', () => {
         type: PieceType.PAWN,
         color: PieceColor.WHITE,
         position: {x: 2, y: 0},
-        specialStates: new Set()
+        specialStates: Set()
       }
 
-      const pieces = new Map<PieceId, Piece>([
+      const pieces = Map([
         [existingPiece.id, existingPiece],
       ])
 

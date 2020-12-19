@@ -1,9 +1,4 @@
-import {
-  CapturedPiece,
-  CapturePiece,
-  MovePiece,
-  SpawnPiece
-} from "features/chessboard/types";
+import {Map, Set} from "immutable"
 import {chessboardState} from "features/chessboard/utils"
 import {
   Piece,
@@ -15,64 +10,22 @@ import {chessboardReducer} from "./chessboard.reducer"
 import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
 
 describe('chessboard reducer', () => {
-  test('spawns piece on spawn piece fulfilled action', () => {
+  test('spawns piece on spawn piece success action', () => {
     // given
-    const state = chessboardState({})
-
-    const piecePayload: SpawnPiece = {
-      type: PieceType.PAWN,
-      color: PieceColor.WHITE,
-      position: {x: 0, y: 0}
-    }
-
-    const action = spawnPiece.fulfilled(piecePayload, '', piecePayload)
-
-    const expectedPiece: Piece = {
-      id: 0,
-      ...piecePayload,
-      specialStates: new Set([PieceSpecialState.FIRST_MOVE])
-    }
-
-    const expectedState = chessboardState({
-      pieces: new Map([[expectedPiece.id, expectedPiece]])
-    })
-
-    // when
-    const nextState = chessboardReducer(state, action)
-
-    // then
-    expect(nextState).toEqual(expectedState)
-  })
-
-  test('moves piece on move piece fulfilled action', () => {
-    // given
-    const existingPiece: Piece = {
-      id: 0,
+    const spawnedPiece: Piece = {
+      id: 1,
       type: PieceType.PAWN,
       color: PieceColor.WHITE,
       position: {x: 0, y: 0},
-      specialStates: new Set([PieceSpecialState.FIRST_MOVE])
+      specialStates: Set([PieceSpecialState.FIRST_MOVE])
     }
 
-    const state = chessboardState({
-      pieces: new Map([[existingPiece.id, existingPiece]])
-    })
+    const state = chessboardState({})
 
-    const piecePayload: MovePiece = {
-      piece: existingPiece,
-      movePosition: {x: 0, y: 2}
-    }
-
-    const action = movePiece.fulfilled(piecePayload, '', piecePayload)
-
-    const expectedMovedPiece: Piece = {
-      ...existingPiece,
-      position: piecePayload.movePosition,
-      specialStates: new Set([])
-    }
+    const action = spawnPiece.success({spawnedPiece})
 
     const expectedState = chessboardState({
-      pieces: new Map([[expectedMovedPiece.id, expectedMovedPiece]])
+      pieces: Map([[spawnedPiece.id, spawnedPiece]])
     })
 
     // when
@@ -82,52 +35,58 @@ describe('chessboard reducer', () => {
     expect(nextState).toEqual(expectedState)
   })
 
-  test('captures piece on capture piece fulfilled action', () => {
+  test('moves piece on move piece success action', () => {
     // given
     const piece: Piece = {
       id: 0,
       type: PieceType.PAWN,
       color: PieceColor.WHITE,
       position: {x: 0, y: 0},
-      specialStates: new Set()
+      specialStates: Set([PieceSpecialState.FIRST_MOVE])
     }
 
+    const movedPiece: Piece = {
+      ...piece,
+      position: {x: 1, y: 1}
+    }
+
+    const state = chessboardState({
+      pieces: Map([[piece.id, piece]])
+    })
+
+    const action = movePiece.success({movedPiece})
+
+    const expectedState = chessboardState({
+      pieces: Map([[piece.id, movedPiece]])
+    })
+
+    // when
+    const nextState = chessboardReducer(state, action)
+
+    // then
+    expect(nextState).toEqual(expectedState)
+  })
+
+  test('captures piece on capture piece success action', () => {
+    // given
     const capturedPiece: Piece = {
       id: 1,
       type: PieceType.PAWN,
       color: PieceColor.BLACK,
       position: {x: 1, y: 1},
-      specialStates: new Set()
+      specialStates: Set()
     }
 
     const state = chessboardState({
-      pieces: new Map([
-        [piece.id, piece],
-        [capturedPiece.id, capturedPiece]
-      ])
+      pieces: Map([[capturedPiece.id, capturedPiece]])
     })
 
-    const piecePayload: CapturePiece = {
-      piece,
-      capturePosition: capturedPiece.position
-    }
-
-    const resultPayload: CapturedPiece = {
-      piece,
+    const action = capturePiece.success({
       capturedPiece
-    }
-
-    const action = capturePiece.fulfilled(resultPayload, '', piecePayload)
-
-    const expectedMovedPieceAfterCapture: Piece = {
-      ...piece,
-      position: capturedPiece.position
-    }
+    })
 
     const expectedState = chessboardState({
-      pieces: new Map([
-        [expectedMovedPieceAfterCapture.id, expectedMovedPieceAfterCapture]
-      ])
+      pieces: Map()
     })
 
     // when

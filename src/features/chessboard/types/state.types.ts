@@ -1,3 +1,4 @@
+import {Map} from "immutable"
 import {Piece, PieceId} from "features/piece/types"
 
 export type ChessboardState = {

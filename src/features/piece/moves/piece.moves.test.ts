@@ -1,3 +1,4 @@
+import {Set} from "immutable"
 import {
   Piece,
   PieceColor,
@@ -16,7 +17,7 @@ describe('piece moves', () => {
       type: PieceType.PAWN,
       color: PieceColor.WHITE,
       position: {x: 0, y: 0},
-      specialStates: new Set()
+      specialStates: Set()
     }
 
     const move: PieceMove = {
@@ -135,7 +136,7 @@ describe('piece moves', () => {
       type: PieceType.PAWN,
       color,
       position,
-      specialStates: new Set()
+      specialStates: Set()
     }
 
     const boardSize = 8

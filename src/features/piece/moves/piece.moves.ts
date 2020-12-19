@@ -1,3 +1,4 @@
+import {Map} from "immutable"
 import {
   LegalPieceMove,
   Piece,
@@ -7,7 +8,7 @@ import {
 } from "features/piece/types"
 import {pawnMovesByColor} from "./pawn.moves"
 
-const pieceMovesByType = new Map<PieceType, Map<PieceColor, LegalPieceMove[]>>([
+const pieceMovesByType = Map([
   [PieceType.PAWN, pawnMovesByColor]
 ])
 
