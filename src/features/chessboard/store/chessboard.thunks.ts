@@ -2,6 +2,7 @@ import {
   CapturedPiece,
   CapturePiece,
   ChessboardThunk,
+  MoveOrCapturePiece,
   MovePiece,
   SpawnPiece,
   TileOccupation
@@ -12,6 +13,7 @@ import {
   PieceMoveScenario,
   PieceSpecialState
 } from "features/piece/types";
+import {capturePiece, movePiece} from "./chessboard.actions";
 import {
   selectBoardSize,
   selectPieceById,
@@ -31,17 +33,30 @@ export const spawnPieceThunk: ChessboardThunk<SpawnPiece, SpawnPiece> =
       : rejectWithValue(spawnPiece);
   }
 
+export const moveOrCapturePieceThunk: ChessboardThunk<MoveOrCapturePiece> =
+  (pieceMove, {getState, dispatch}) => {
+    const {piece, position} = pieceMove
+    const state = getState()
+    const tileOccupation = selectTileOccupation(state)(position)
+
+    if (tileOccupation === TileOccupation.EMPTY) {
+      dispatch(movePiece({piece, movePosition: position}))
+    } else {
+      dispatch(capturePiece({piece, capturePosition: position}))
+    }
+  }
+
 export const movePieceThunk: ChessboardThunk<MovePiece, MovePiece> =
   (movePiece, {getState, rejectWithValue}) => {
-    const {piece, toPosition} = movePiece
+    const {piece, movePosition} = movePiece
     const state = getState()
     const boardSize = selectBoardSize(state)
-    const tileOccupation = selectTileOccupation(state)(toPosition)
+    const tileOccupation = selectTileOccupation(state)(movePosition)
     const pieceExists = !!selectPieceById(state)(piece.id)
 
     const move: PieceMove = {
-      xOffset: toPosition.x - piece.position.x,
-      yOffset: toPosition.y - piece.position.y,
+      xOffset: movePosition.x - piece.position.x,
+      yOffset: movePosition.y - piece.position.y,
       scenario: piece.specialStates.has(PieceSpecialState.FIRST_MOVE)
         ? PieceMoveScenario.FIRST_MOVE
         : PieceMoveScenario.MOVE
@@ -54,7 +69,7 @@ export const movePieceThunk: ChessboardThunk<MovePiece, MovePiece> =
       : rejectWithValue(movePiece)
   }
 
-export const capturePieceThunk: ChessboardThunk<CapturedPiece, CapturePiece> =
+export const capturePieceThunk: ChessboardThunk<CapturePiece, CapturedPiece> =
   (capturePiece, {getState, rejectWithValue}) => {
     const {piece, capturePosition} = capturePiece
     const state = getState()

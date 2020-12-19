@@ -1,12 +1,18 @@
 import {
   CapturedPiece,
   CapturePiece,
+  MoveOrCapturePiece,
   MovePiece,
   SpawnPiece
 } from "features/chessboard/types"
 import {chessboardSlice} from "features/chessboard/utils"
 import {Piece, PieceColor, PiecePosition, PieceType} from "features/piece/types"
-import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
+import {
+  capturePiece,
+  moveOrCapturePiece,
+  movePiece,
+  spawnPiece
+} from "./chessboard.actions"
 
 describe('chessboard thunks', () => {
   describe('spawn piece thunk', () => {
@@ -73,6 +79,54 @@ describe('chessboard thunks', () => {
     })
   })
 
+  // todo: fix this
+  describe.skip('move or capture piece thunk', () => {
+    test('moves piece when target position is not occupied', async () => {
+      // given
+      const dispatchMock = jest.fn()
+
+      const piece: Piece = {
+        id: 0,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 3, y: 3},
+        specialStates: new Set()
+      }
+
+      const state = chessboardSlice({
+        pieces: new Map([[piece.id, piece]])
+      })
+
+      const piecePayload: MoveOrCapturePiece = {
+        piece,
+        position: {x: 4, y: 3}
+      }
+
+      const expectedMovePiecePayload: MovePiece = {
+        piece,
+        movePosition: piecePayload.position
+      }
+
+      const thunk = moveOrCapturePiece(piecePayload)
+
+      // when
+      const result = await thunk(dispatchMock, () => state, undefined)
+
+      // then
+      expect(result.type).toEqual(moveOrCapturePiece.fulfilled.type)
+      expect(dispatchMock).toBeCalledTimes(3)
+      expect(dispatchMock.mock.calls[0].type).toEqual(moveOrCapturePiece.pending.type)
+      expect(dispatchMock.mock.calls[0].type).toEqual(moveOrCapturePiece.pending.type)
+      expect(dispatchMock.mock.calls[2].type).toEqual(moveOrCapturePiece.fulfilled.type)
+      const call = dispatchMock.mock.calls[1];
+      expect(call).toBeDefined()
+    })
+
+    test('captures piece when target position is occupied', async () => {
+
+    })
+  })
+
   describe('move piece thunk', () => {
     test('successfully moves piece when target position is not occupied', async () => {
       // given
@@ -101,7 +155,7 @@ describe('chessboard thunks', () => {
 
       const piecePayload: MovePiece = {
         piece: pieceToMove,
-        toPosition: {x: 5, y: 4}
+        movePosition: {x: 5, y: 4}
       }
 
       const thunk = movePiece(piecePayload)
@@ -141,7 +195,7 @@ describe('chessboard thunks', () => {
 
       const piecePayload: MovePiece = {
         piece: pieceToMove,
-        toPosition: existingPiece.position
+        movePosition: existingPiece.position
       }
 
       const thunk = movePiece(piecePayload)
@@ -181,7 +235,7 @@ describe('chessboard thunks', () => {
 
       const piecePayload: MovePiece = {
         piece: pieceToMove,
-        toPosition: {x: 4, y: 4}
+        movePosition: {x: 4, y: 4}
       }
 
       const thunk = movePiece(piecePayload)
@@ -210,7 +264,7 @@ describe('chessboard thunks', () => {
 
       const piecePayload: MovePiece = {
         piece: pieceToMove,
-        toPosition: {x: 4, y: 4}
+        movePosition: {x: 4, y: 4}
       }
 
       const thunk = movePiece(piecePayload)

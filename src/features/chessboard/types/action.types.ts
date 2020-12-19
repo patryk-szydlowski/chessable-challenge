@@ -6,9 +6,14 @@ export type SpawnPiece = {
   position: PiecePosition
 }
 
+export type MoveOrCapturePiece = {
+  piece: Piece
+  position: PiecePosition
+}
+
 export type MovePiece = {
   piece: Piece
-  toPosition: PiecePosition
+  movePosition: PiecePosition
 }
 
 export type CapturePiece = {

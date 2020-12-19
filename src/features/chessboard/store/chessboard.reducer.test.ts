@@ -60,14 +60,14 @@ describe('chessboard reducer', () => {
 
     const piecePayload: MovePiece = {
       piece: existingPiece,
-      toPosition: {x: 0, y: 2}
+      movePosition: {x: 0, y: 2}
     }
 
     const action = movePiece.fulfilled(piecePayload, '', piecePayload)
 
     const expectedMovedPiece: Piece = {
       ...existingPiece,
-      position: piecePayload.toPosition,
+      position: piecePayload.movePosition,
       specialStates: new Set([])
     }
 

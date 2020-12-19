@@ -4,7 +4,7 @@ import {ChessboardStateSlice} from "./state.types"
 
 export type ChessboardThunkConfig = {
   state: ChessboardStateSlice
-  dispatch: Dispatch
+  dispatch: Dispatch<any>
 }
 
-export type ChessboardThunk<R, A = void> = AsyncThunkPayloadCreator<R, A, ChessboardThunkConfig>
+export type ChessboardThunk<A = void, R = void> = AsyncThunkPayloadCreator<R, A, ChessboardThunkConfig>

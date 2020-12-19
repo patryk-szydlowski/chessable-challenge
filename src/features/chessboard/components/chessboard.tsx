@@ -22,7 +22,12 @@ export const Chessboard: React.VFC<Props> = ({boardSize}) => {
   return (
     <StyledChessboard size={TILE_SIZE * boardSize}>
       {chessboardTiles.map(([row, column]) => (
-        <ChessboardTileContainer row={row} column={column} size={TILE_SIZE}/>
+        <ChessboardTileContainer
+          key={row * boardSize + column}
+          row={row}
+          column={column}
+          size={TILE_SIZE}
+        />
       ))}
     </StyledChessboard>
   );

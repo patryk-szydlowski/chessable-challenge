@@ -15,14 +15,14 @@ export const chessboardReducer = createReducer(initialState, builder => builder
     pieces.set(pieceId, piece)
   })
   .addCase(movePiece.fulfilled, ({pieces}, action) => {
-    const {piece, toPosition} = action.payload
+    const {piece, movePosition} = action.payload
 
     const updatedStates = new Set([...piece.specialStates])
     updatedStates.delete(PieceSpecialState.FIRST_MOVE)
 
     const movedPiece: Piece = {
       ...piece,
-      position: toPosition,
+      position: movePosition,
       specialStates: updatedStates
     }
 
