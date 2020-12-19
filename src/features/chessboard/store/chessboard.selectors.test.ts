@@ -81,8 +81,8 @@ describe('chessboard selectors', () => {
       ])
 
       const expectedPiecesByPosition = Map([
-        [{x: 2, y: 0}, firstPiece],
-        [{x: 1, y: 7}, secondPiece],
+        ['2-0', firstPiece],
+        ['1-7', secondPiece],
       ])
 
       const state = chessboardSlice({pieces})

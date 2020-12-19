@@ -12,7 +12,7 @@ export const chessboardReducer = createReducer<ChessboardState, Action>(initialS
     ...state,
     pieces: state.pieces.set(movedPiece.id, movedPiece)
   }))
-  .handleAction(capturePiece.success, (state, {payload: {capturedPiece}}) => ({
+  .handleAction(capturePiece, (state, {payload: {capturedPieceId}}) => ({
     ...state,
-    pieces: state.pieces.delete(capturedPiece.id)
+    pieces: state.pieces.delete(capturedPieceId)
   }))

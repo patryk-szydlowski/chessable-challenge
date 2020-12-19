@@ -1,4 +1,10 @@
-import {Piece, PieceColor, PiecePosition, PieceType} from "features/piece/types"
+import {
+  Piece,
+  PieceColor,
+  PieceId,
+  PiecePosition,
+  PieceType
+} from "features/piece/types"
 
 export type SpawnPiece = {
   type: PieceType
@@ -11,7 +17,7 @@ export type SpawnedPiece = {
 }
 
 export type MovePiece = {
-  piece: Piece
+  pieceId: PieceId
   movePosition: PiecePosition
 }
 
@@ -19,11 +25,6 @@ export type MovedPiece = {
   movedPiece: Piece
 }
 
-export type CapturePiece = {
-  piece: Piece
-  capturePosition: PiecePosition
-}
-
 export type CapturedPiece = {
-  capturedPiece: Piece
+  capturedPieceId: PieceId
 }

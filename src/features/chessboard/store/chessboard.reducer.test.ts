@@ -81,9 +81,7 @@ describe('chessboard reducer', () => {
       pieces: Map([[capturedPiece.id, capturedPiece]])
     })
 
-    const action = capturePiece.success({
-      capturedPiece
-    })
+    const action = capturePiece({capturedPieceId: capturedPiece.id})
 
     const expectedState = chessboardState({
       pieces: Map()

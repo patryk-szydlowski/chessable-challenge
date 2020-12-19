@@ -27,8 +27,9 @@ export const selectPieceById = createSelector(
 
 export const selectPieceByPosition = createSelector(
   selectPiecesByPosition,
-  (piecesByPosition) => (position: PiecePosition) =>
-    piecesByPosition.get(serializePosition(position))
+  (piecesByPosition) => (position: PiecePosition) => {
+    return piecesByPosition.get(serializePosition(position));
+  }
 )
 
 export const selectTileOccupation = createSelector(

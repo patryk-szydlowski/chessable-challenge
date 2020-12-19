@@ -1,7 +1,6 @@
-import {createAsyncAction} from "typesafe-actions"
+import {createAction, createAsyncAction} from "typesafe-actions"
 import {
   CapturedPiece,
-  CapturePiece,
   ChessboardError,
   MovedPiece,
   MovePiece,
@@ -21,8 +20,6 @@ export const movePiece = createAsyncAction(
   '@chessboard/move-piece/failure',
 )<MovePiece, MovedPiece, ChessboardError>()
 
-export const capturePiece = createAsyncAction(
-  '@chessboard/capture-piece/request',
-  '@chessboard/capture-piece/success',
-  '@chessboard/capture-piece/failure',
-)<CapturePiece, CapturedPiece, ChessboardError>()
+export const capturePiece = createAction(
+  '@chessboard/capture-piece',
+)<CapturedPiece>()
