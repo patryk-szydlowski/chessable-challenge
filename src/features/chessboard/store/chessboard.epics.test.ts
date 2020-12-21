@@ -2,7 +2,11 @@ import {Map, Set} from "immutable"
 import {of} from "rxjs"
 import {marbles} from "rxjs-marbles/jest"
 import {actions, state} from "common/utils"
-import {MovePiece, SpawnPiece} from "features/chessboard/types"
+import {
+  MovePiece,
+  SpawnPiece,
+  SpawnPieceAtRandomPosition
+} from "features/chessboard/types"
 import {chessboardSlice} from "features/chessboard/utils"
 import {
   Piece,
@@ -10,8 +14,17 @@ import {
   PieceSpecialState,
   PieceType
 } from "features/piece/types"
-import {movePieceEpic, spawnPieceEpic} from "./chessboard.epics"
-import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
+import {
+  movePieceEpic,
+  spawnPieceAtRandomPositionEpic,
+  spawnPieceEpic
+} from "./chessboard.epics"
+import {
+  capturePiece,
+  movePiece,
+  spawnPiece,
+  spawnPieceAtRandomPosition
+} from "./chessboard.actions"
 
 describe("chessboard epics", () => {
   describe("spawn piece epic", () => {
@@ -40,7 +53,6 @@ describe("chessboard epics", () => {
         ...payload,
         specialStates: Set([PieceSpecialState.FIRST_MOVE])
       }
-
 
       const actions$ = actions(context.hot("a", {a: spawnPiece.request(payload)}))
       const state$ = state(of(slice))
@@ -74,7 +86,6 @@ describe("chessboard epics", () => {
         position: {x: 1, y: 1}
       }
 
-
       const actions$ = actions(context.hot("a", {a: spawnPiece.request(payload)}))
       const state$ = state(of(slice))
 
@@ -82,6 +93,97 @@ describe("chessboard epics", () => {
 
       // when
       const result = spawnPieceEpic(actions$, state$, {})
+
+      // then
+      context.expect(result).toBeObservable(expected)
+    }))
+  })
+
+  describe("spawn piece at random position epic", () => {
+    test("returns spawn piece at random position success and spawn piece request when not occupied position exists", marbles((context) => {
+      // given
+      const firstPiece: Piece = {
+        id: 1,
+        position: {x: 0, y: 0},
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        specialStates: Set()
+      }
+
+      const secondPiece: Piece = {
+        id: 2,
+        position: {x: 1, y: 0},
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        specialStates: Set()
+      }
+
+      const thirdPiece: Piece = {
+        id: 1,
+        position: {x: 0, y: 1},
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        specialStates: Set()
+      }
+
+      const slice = chessboardSlice({
+        boardSize: 2,
+        pieces: Map([
+          [firstPiece.id, firstPiece],
+          [secondPiece.id, secondPiece],
+          [thirdPiece.id, thirdPiece],
+        ])
+      })
+
+      const payload: SpawnPieceAtRandomPosition = {
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE
+      }
+
+      const actions$ = actions(context.hot("a", {a: spawnPieceAtRandomPosition.request(payload)}))
+      const state$ = state(of(slice))
+
+      const expected = context.hot("(ab)", {
+        a: spawnPieceAtRandomPosition.success(),
+        b: spawnPiece.request({...payload, position: {x: 1, y: 1}})
+      })
+
+      // when
+      const result = spawnPieceAtRandomPositionEpic(actions$, state$, {})
+
+      // then
+      context.expect(result).toBeObservable(expected)
+    }))
+
+    test("returns spawn piece at random position failure when all positions are occupied", marbles((context) => {
+      // given
+      const existingPiece: Piece = {
+        id: 1,
+        position: {x: 0, y: 0},
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        specialStates: Set()
+      }
+
+      const slice = chessboardSlice({
+        boardSize: 1,
+        pieces: Map([
+          [existingPiece.id, existingPiece],
+        ])
+      })
+
+      const payload: SpawnPieceAtRandomPosition = {
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE
+      }
+
+      const actions$ = actions(context.hot("a", {a: spawnPieceAtRandomPosition.request(payload)}))
+      const state$ = state(of(slice))
+
+      const expected = context.hot("a", {a: spawnPieceAtRandomPosition.failure({})})
+
+      // when
+      const result = spawnPieceAtRandomPositionEpic(actions$, state$, {})
 
       // then
       context.expect(result).toBeObservable(expected)

@@ -1,14 +1,16 @@
 import {Map, Set} from "immutable"
 import {TileOccupation} from "features/chessboard/types"
 import {chessboardSlice} from "features/chessboard/utils"
-import {Piece, PieceColor, PieceType} from "features/piece/types"
+import {Piece, PieceColor, PieceType, Position} from "features/piece/types"
 import {
   selectBoardSize,
+  selectEmptyPositions,
   selectNextAvailablePieceId,
   selectPieceById,
   selectPieceByPosition,
   selectPiecesById,
   selectPiecesByPosition,
+  selectSelectedPieceId,
   selectTileOccupation
 } from "./chessboard.selectors"
 
@@ -53,6 +55,18 @@ describe("chessboard selectors", () => {
 
       // expect
       expect(selectPiecesById(state)).toEqual(pieces)
+    })
+  })
+
+  describe("selected piece id selector", () => {
+    test("returns selected piece id", () => {
+      // given
+      const selectedPieceId = 1
+
+      const state = chessboardSlice({selectedPieceId})
+
+      // expect
+      expect(selectSelectedPieceId(state)).toEqual(selectedPieceId)
     })
   })
 
@@ -266,6 +280,33 @@ describe("chessboard selectors", () => {
 
       // expect
       expect(selectNextAvailablePieceId(state)).toEqual(1)
+    })
+  })
+
+  describe("empty positions selector", () => {
+    test("returns all empty positions on the board", () => {
+      // given
+      const existingPiece: Piece = {
+        id: 10,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 0, y: 0},
+        specialStates: Set()
+      }
+
+      const expectedEmptyPositions: Position[] = [
+        {x: 0, y: 1},
+        {x: 1, y: 0},
+        {x: 1, y: 1}
+      ]
+
+      const state = chessboardSlice({
+        boardSize: 2,
+        pieces: Map([[existingPiece.id, existingPiece]])
+      })
+
+      // expect
+      expect(selectEmptyPositions(state)).toEqual(expectedEmptyPositions)
     })
   })
 })

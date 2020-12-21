@@ -6,8 +6,16 @@ import {
   PieceSpecialState,
   PieceType
 } from "features/piece/types"
+import {
+  capturePiece,
+  movePiece,
+  resetBoard,
+  selectPiece,
+  spawnPiece,
+  unselectPiece
+} from "./chessboard.actions"
 import {chessboardReducer} from "./chessboard.reducer"
-import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
+import {initialState} from "./chessboard.state"
 
 describe("chessboard reducer", () => {
   test("spawns piece on spawn piece success action", () => {
@@ -86,6 +94,56 @@ describe("chessboard reducer", () => {
     const expectedState = chessboardState({
       pieces: Map()
     })
+
+    // when
+    const nextState = chessboardReducer(state, action)
+
+    // then
+    expect(nextState).toEqual(expectedState)
+  })
+
+  test("selects piece on select piece action", () => {
+    // given
+    const selectedPieceId = 1
+    const state = chessboardState({})
+
+    const action = selectPiece({selectedPieceId})
+
+    const expectedState = chessboardState({selectedPieceId})
+
+    // when
+    const nextState = chessboardReducer(state, action)
+
+    // then
+    expect(nextState).toEqual(expectedState)
+  })
+
+  test("unselects piece on unselect piece action", () => {
+    // given
+    const state = chessboardState({selectedPieceId: 1})
+
+    const action = unselectPiece()
+
+    const expectedState = chessboardState({selectedPieceId: undefined})
+
+    // when
+    const nextState = chessboardReducer(state, action)
+
+    // then
+    expect(nextState).toEqual(expectedState)
+  })
+
+  test("returns to initial state on reset board action", () => {
+    // given
+    const state = chessboardState({
+      boardSize: 4,
+      pieces: Map(),
+      selectedPieceId: 1
+    })
+
+    const action = resetBoard()
+
+    const expectedState = chessboardState(initialState)
 
     // when
     const nextState = chessboardReducer(state, action)
