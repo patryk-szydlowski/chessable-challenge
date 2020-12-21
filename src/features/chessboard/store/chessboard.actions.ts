@@ -5,7 +5,8 @@ import {
   MovedPiece,
   MovePiece,
   SpawnedPiece,
-  SpawnPiece
+  SpawnPiece,
+  SpawnPieceAtRandomPosition
 } from "features/chessboard/types"
 
 export const spawnPiece = createAsyncAction(
@@ -13,6 +14,12 @@ export const spawnPiece = createAsyncAction(
   "@chessboard/spawn-piece/success",
   "@chessboard/spawn-piece/failure",
 )<SpawnPiece, SpawnedPiece, ChessboardError>()
+
+export const spawnPieceAtRandomPosition = createAsyncAction(
+  "@chessboard/spawn-piece-at-random-position/request",
+  "@chessboard/spawn-piece-at-random-position/success",
+  "@chessboard/spawn-piece-at-random-position/failure",
+)<SpawnPieceAtRandomPosition, void, ChessboardError>()
 
 export const movePiece = createAsyncAction(
   "@chessboard/move-piece/request",
@@ -23,3 +30,7 @@ export const movePiece = createAsyncAction(
 export const capturePiece = createAction(
   "@chessboard/capture-piece",
 )<CapturedPiece>()
+
+export const resetBoard = createAction(
+  "@chessboard/reset-board"
+)<void>()

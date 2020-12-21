@@ -16,6 +16,11 @@ export type SpawnedPiece = {
   spawnedPiece: Piece
 }
 
+export type SpawnPieceAtRandomPosition = {
+  type: PieceType
+  color: PieceColor
+}
+
 export type MovePiece = {
   pieceId: PieceId
   movePosition: PiecePosition

@@ -1,1 +1,1 @@
-export * from "./chessboard-container"
+export * from "./interactive-chessboard"

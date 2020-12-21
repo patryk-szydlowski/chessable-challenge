@@ -1,4 +1,5 @@
 import {createSelector} from "reselect"
+import {matrix} from "common/utils"
 import {ChessboardStateSlice, TileOccupation} from "features/chessboard/types"
 import {serializePosition} from "features/chessboard/utils"
 import {PieceColor, PieceId, PiecePosition} from "features/piece/types"
@@ -51,4 +52,13 @@ export const selectTileOccupation = createSelector(
 export const selectNextAvailablePieceId = createSelector(
   selectPiecesById,
   (pieces) => Math.max(0, ...pieces.keys()) + 1
+)
+
+export const selectEmptyPositions = createSelector(
+  selectBoardSize,
+  selectPieceByPosition,
+  (boardSize, pieceExists): PiecePosition[] =>
+    matrix(boardSize)
+      .map(([x, y]) => ({x, y}))
+      .filter(position => !pieceExists(position))
 )

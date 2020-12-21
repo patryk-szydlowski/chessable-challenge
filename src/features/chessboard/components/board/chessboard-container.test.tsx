@@ -1,8 +1,8 @@
 import {render} from "@testing-library/react"
 import configureStore from "redux-mock-store"
-import {ChessboardStateSlice} from "../types"
+import {ChessboardStateSlice} from "../../types"
 import {Provider as StoreProvider} from "react-redux"
-import {chessboardSlice} from "../utils"
+import {chessboardSlice} from "../../utils"
 import {ChessboardContainer} from "./chessboard-container"
 
 jest.mock("./chessboard-tile-container", () => ({

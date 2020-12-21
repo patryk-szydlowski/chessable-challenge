@@ -10,3 +10,11 @@ export function rangeFromZero(endExclusive: number): number[] {
 export function product<A, B>(first: A[], second: B[]): [A, B][] {
   return first.flatMap(a => second.map<[A, B]>(b => ([a, b])))
 }
+
+export function matrix(size: number): [number, number][] {
+  return product(rangeFromZero(size), rangeFromZero(size))
+}
+
+export function pickRandom<A>(array: A[]): A | undefined {
+  return array[Math.floor(Math.random() * (array.length + 1))]
+}

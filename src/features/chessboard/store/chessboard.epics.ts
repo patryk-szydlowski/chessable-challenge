@@ -2,6 +2,7 @@ import {Set} from "immutable"
 import {of} from "rxjs"
 import {filter, map, mergeMap, withLatestFrom} from "rxjs/operators"
 import {isActionOf} from "typesafe-actions"
+import {pickRandom} from "common/utils"
 import {ChessboardEpic, TileOccupation} from "features/chessboard/types"
 import {isLegalPieceMove} from "features/piece/moves"
 import {
@@ -9,9 +10,15 @@ import {
   PieceMoveScenario,
   PieceSpecialState
 } from "features/piece/types"
-import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
+import {
+  capturePiece,
+  movePiece,
+  spawnPiece,
+  spawnPieceAtRandomPosition
+} from "./chessboard.actions"
 import {
   selectBoardSize,
+  selectEmptyPositions,
   selectNextAvailablePieceId,
   selectPieceById,
   selectPieceByPosition,
@@ -35,6 +42,22 @@ export const spawnPieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
       })
       : spawnPiece.failure({})
   })
+)
+
+export const spawnPieceAtRandomPositionEpic: ChessboardEpic = (actions$, state$) => actions$.pipe(
+  filter(isActionOf(spawnPieceAtRandomPosition.request)),
+  withLatestFrom(state$),
+  mergeMap(([{payload: pieceSpawn}, state]) => {
+    const emptyPositions = selectEmptyPositions(state)
+    const position = pickRandom(emptyPositions)
+
+    return !!position
+      ? of(
+        spawnPieceAtRandomPosition.success(),
+        spawnPiece.request({...pieceSpawn, position})
+      )
+      : of(spawnPieceAtRandomPosition.failure({}))
+  }),
 )
 
 export const movePieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
@@ -85,4 +108,8 @@ export const movePieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
   })
 )
 
-export const chessboardEpics = [spawnPieceEpic, movePieceEpic]
+export const chessboardEpics = [
+  spawnPieceEpic,
+  spawnPieceAtRandomPositionEpic,
+  movePieceEpic
+]

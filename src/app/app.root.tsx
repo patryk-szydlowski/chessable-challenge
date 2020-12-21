@@ -1,9 +1,9 @@
 import React, {FC} from "react"
-import {ChessboardContainer} from "features/chessboard/components"
 import {AppProvider} from "./app.provider"
+import {InteractiveChessboard} from "features/chessboard/components";
 
 export const AppRoot: FC = () => (
   <AppProvider>
-    <ChessboardContainer/>
+    <InteractiveChessboard/>
   </AppProvider>
 )
