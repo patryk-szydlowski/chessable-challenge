@@ -4,13 +4,13 @@ import {Box} from "common/components"
 import {PieceColor, PieceType} from "features/piece/types"
 
 const textColor = {
-  [PieceColor.WHITE]: '#FFFFFF',
-  [PieceColor.BLACK]: '#000000'
+  [PieceColor.WHITE]: "#FFFFFF",
+  [PieceColor.BLACK]: "#000000"
 }
 
 const strokeColor = {
-  [PieceColor.WHITE]: '#000000',
-  [PieceColor.BLACK]: '#FFFFFF'
+  [PieceColor.WHITE]: "#000000",
+  [PieceColor.BLACK]: "#FFFFFF"
 }
 
 // todo: replace with actual piece SVGs

@@ -9,8 +9,8 @@ import {
 } from "features/piece/types"
 import {isLegalPieceMove} from "./piece.moves"
 
-describe('piece moves', () => {
-  test('move is legal when scenario is allowed and within board', () => {
+describe("piece moves", () => {
+  test("move is legal when scenario is allowed and within board", () => {
     // given
     const piece: Piece = {
       id: 1,
@@ -129,7 +129,7 @@ describe('piece moves', () => {
       {x: 0, y: 1},
       {xOffset: 0, yOffset: -2, scenario: PieceMoveScenario.FIRST_MOVE}
     ],
-  ])('pawn move is illegal when %s', (_, color, position, move) => {
+  ])("pawn move is illegal when %s", (_, color, position, move) => {
     // given
     const piece: Piece = {
       id: 1,

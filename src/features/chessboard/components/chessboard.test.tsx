@@ -5,8 +5,8 @@ jest.mock("./chessboard-tile-container", () => ({
   ChessboardTileContainer: () => <div data-testid="chessboard-tile"/>
 }))
 
-describe('chessboard', () => {
-  test('renders chessboard with provided board size', () => {
+describe("chessboard", () => {
+  test("renders chessboard with provided board size", () => {
     // given
     const boardSize = 8
     const {getAllByTestId} = render(<Chessboard boardSize={boardSize}/>)

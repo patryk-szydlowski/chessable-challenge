@@ -13,9 +13,9 @@ import {
 import {movePieceEpic, spawnPieceEpic} from "./chessboard.epics"
 import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
 
-describe('chessboard epics', () => {
-  describe('spawn piece epic', () => {
-    test('returns spawn piece success when spawn position is not occupied', marbles((context) => {
+describe("chessboard epics", () => {
+  describe("spawn piece epic", () => {
+    test("returns spawn piece success when spawn position is not occupied", marbles((context) => {
       // given
       const existingPiece: Piece = {
         id: 1,
@@ -42,10 +42,10 @@ describe('chessboard epics', () => {
       }
 
 
-      const actions$ = actions(context.hot('a', {a: spawnPiece.request(payload)}))
+      const actions$ = actions(context.hot("a", {a: spawnPiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot('a', {a: spawnPiece.success({spawnedPiece})})
+      const expected = context.hot("a", {a: spawnPiece.success({spawnedPiece})})
 
       // when
       const result = spawnPieceEpic(actions$, state$, {})
@@ -54,7 +54,7 @@ describe('chessboard epics', () => {
       context.expect(result).toBeObservable(expected)
     }))
 
-    test('returns spawn piece failure when spawn position is occupied', marbles((context) => {
+    test("returns spawn piece failure when spawn position is occupied", marbles((context) => {
       // given
       const existingPiece: Piece = {
         id: 1,
@@ -75,10 +75,10 @@ describe('chessboard epics', () => {
       }
 
 
-      const actions$ = actions(context.hot('a', {a: spawnPiece.request(payload)}))
+      const actions$ = actions(context.hot("a", {a: spawnPiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot('a', {a: spawnPiece.failure({})})
+      const expected = context.hot("a", {a: spawnPiece.failure({})})
 
       // when
       const result = spawnPieceEpic(actions$, state$, {})
@@ -88,8 +88,8 @@ describe('chessboard epics', () => {
     }))
   })
 
-  describe('move piece epic', () => {
-    test('returns move piece success when move position is not occupied and move is legal', marbles((context) => {
+  describe("move piece epic", () => {
+    test("returns move piece success when move position is not occupied and move is legal", marbles((context) => {
       // given
       const pieceToMove: Piece = {
         id: 1,
@@ -113,10 +113,10 @@ describe('chessboard epics', () => {
         position: payload.movePosition
       }
 
-      const actions$ = actions(context.hot('a', {a: movePiece.request(payload)}))
+      const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot('a', {a: movePiece.success({movedPiece})})
+      const expected = context.hot("a", {a: movePiece.success({movedPiece})})
 
       // when
       const result = movePieceEpic(actions$, state$, {})
@@ -125,7 +125,7 @@ describe('chessboard epics', () => {
       context.expect(result).toBeObservable(expected)
     }))
 
-    test('returns move piece success when move is a first-move scenario', marbles((context) => {
+    test("returns move piece success when move is a first-move scenario", marbles((context) => {
       // given
       const pieceToMove: Piece = {
         id: 1,
@@ -150,10 +150,10 @@ describe('chessboard epics', () => {
         specialStates: Set()
       }
 
-      const actions$ = actions(context.hot('a', {a: movePiece.request(payload)}))
+      const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot('a', {a: movePiece.success({movedPiece})})
+      const expected = context.hot("a", {a: movePiece.success({movedPiece})})
 
       // when
       const result = movePieceEpic(actions$, state$, {})
@@ -162,7 +162,7 @@ describe('chessboard epics', () => {
       context.expect(result).toBeObservable(expected)
     }))
 
-    test('returns move piece success and piece capture when move position is occupied by different color', marbles((context) => {
+    test("returns move piece success and piece capture when move position is occupied by different color", marbles((context) => {
       // given
       const pieceToMove: Piece = {
         id: 1,
@@ -197,10 +197,10 @@ describe('chessboard epics', () => {
         position: payload.movePosition
       }
 
-      const actions$ = actions(context.hot('a', {a: movePiece.request(payload)}))
+      const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot('(ab)', {
+      const expected = context.hot("(ab)", {
         a: movePiece.success({movedPiece}),
         b: capturePiece({capturedPieceId: pieceToCapture.id})
       })
@@ -212,7 +212,7 @@ describe('chessboard epics', () => {
       context.expect(result).toBeObservable(expected)
     }))
 
-    test('returns move piece failure when piece does not exist on the chessboard', marbles((context) => {
+    test("returns move piece failure when piece does not exist on the chessboard", marbles((context) => {
       // given
       const existingPiece: Piece = {
         id: 1,
@@ -231,10 +231,10 @@ describe('chessboard epics', () => {
         movePosition: {x: 1, y: 2}
       }
 
-      const actions$ = actions(context.hot('a', {a: movePiece.request(payload)}))
+      const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot('a', {a: movePiece.failure({})})
+      const expected = context.hot("a", {a: movePiece.failure({})})
 
       // when
       const result = movePieceEpic(actions$, state$, {})
@@ -243,7 +243,7 @@ describe('chessboard epics', () => {
       context.expect(result).toBeObservable(expected)
     }))
 
-    test('returns move piece failure when move is illegal', marbles((context) => {
+    test("returns move piece failure when move is illegal", marbles((context) => {
       // given
       const pieceToMove: Piece = {
         id: 1,
@@ -262,10 +262,10 @@ describe('chessboard epics', () => {
         movePosition: {x: 7, y: 1}
       }
 
-      const actions$ = actions(context.hot('a', {a: movePiece.request(payload)}))
+      const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot('a', {a: movePiece.failure({})})
+      const expected = context.hot("a", {a: movePiece.failure({})})
 
       // when
       const result = movePieceEpic(actions$, state$, {})
@@ -274,7 +274,7 @@ describe('chessboard epics', () => {
       context.expect(result).toBeObservable(expected)
     }))
 
-    test('returns move piece failure when move position is occupied by same color', marbles((context) => {
+    test("returns move piece failure when move position is occupied by same color", marbles((context) => {
       // given
       const pieceToMove: Piece = {
         id: 1,
@@ -304,10 +304,10 @@ describe('chessboard epics', () => {
         movePosition: existingPiece.position
       }
 
-      const actions$ = actions(context.hot('a', {a: movePiece.request(payload)}))
+      const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot('a', {a: movePiece.failure({})})
+      const expected = context.hot("a", {a: movePiece.failure({})})
 
       // when
       const result = movePieceEpic(actions$, state$, {})

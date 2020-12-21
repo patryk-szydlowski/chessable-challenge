@@ -12,9 +12,9 @@ import {
   selectTileOccupation
 } from "./chessboard.selectors"
 
-describe('chessboard selectors', () => {
-  describe('board size selector', () => {
-    test('returns board size', () => {
+describe("chessboard selectors", () => {
+  describe("board size selector", () => {
+    test("returns board size", () => {
       // given
       const boardSize = 10
 
@@ -25,8 +25,8 @@ describe('chessboard selectors', () => {
     })
   })
 
-  describe('pieces by id selector', () => {
-    test('returns chessboard pieces by their id', () => {
+  describe("pieces by id selector", () => {
+    test("returns chessboard pieces by their id", () => {
       // given
       const firstPiece: Piece = {
         id: 0,
@@ -56,8 +56,8 @@ describe('chessboard selectors', () => {
     })
   })
 
-  describe('pieces by position selector', () => {
-    test('returns chessboard pieces by their serialized position', () => {
+  describe("pieces by position selector", () => {
+    test("returns chessboard pieces by their serialized position", () => {
       // given
       const firstPiece: Piece = {
         id: 0,
@@ -81,8 +81,8 @@ describe('chessboard selectors', () => {
       ])
 
       const expectedPiecesByPosition = Map([
-        ['2-0', firstPiece],
-        ['1-7', secondPiece],
+        ["2-0", firstPiece],
+        ["1-7", secondPiece],
       ])
 
       const state = chessboardSlice({pieces})
@@ -92,8 +92,8 @@ describe('chessboard selectors', () => {
     })
   })
 
-  describe('piece by id selector', () => {
-    test('returns piece by id when exists on the chessboard', () => {
+  describe("piece by id selector", () => {
+    test("returns piece by id when exists on the chessboard", () => {
       // given
       const matchingPiece: Piece = {
         id: 0,
@@ -113,7 +113,7 @@ describe('chessboard selectors', () => {
       expect(selectPieceById(state)(matchingPiece.id)).toEqual(matchingPiece)
     })
 
-    test('returns undefined when piece by id does not exist on the chessboard', () => {
+    test("returns undefined when piece by id does not exist on the chessboard", () => {
       // given
       const notMatchingPiece: Piece = {
         id: 10,
@@ -134,8 +134,8 @@ describe('chessboard selectors', () => {
     })
   })
 
-  describe('piece by position selector', () => {
-    test('returns piece by position when exists on the chessboard', () => {
+  describe("piece by position selector", () => {
+    test("returns piece by position when exists on the chessboard", () => {
       // given
       const firstPiece: Piece = {
         id: 0,
@@ -155,7 +155,7 @@ describe('chessboard selectors', () => {
       expect(selectPieceByPosition(state)(firstPiece.position)).toEqual(firstPiece)
     })
 
-    test('returns undefined when piece by position does not exist on the chessboard', () => {
+    test("returns undefined when piece by position does not exist on the chessboard", () => {
       // given
       const notMatchingPiece: Piece = {
         id: 0,
@@ -176,8 +176,8 @@ describe('chessboard selectors', () => {
     })
   })
 
-  describe('tile occupation selector', () => {
-    test('returns indication that tile is occupied by white', () => {
+  describe("tile occupation selector", () => {
+    test("returns indication that tile is occupied by white", () => {
       // given
       const occupyingPiece: Piece = {
         id: 0,
@@ -197,7 +197,7 @@ describe('chessboard selectors', () => {
       expect(selectTileOccupation(state)(occupyingPiece.position)).toEqual(TileOccupation.OCCUPIED_BY_WHITE)
     })
 
-    test('returns indication that tile is occupied by black', () => {
+    test("returns indication that tile is occupied by black", () => {
       // given
       const occupyingPiece: Piece = {
         id: 0,
@@ -217,7 +217,7 @@ describe('chessboard selectors', () => {
       expect(selectTileOccupation(state)(occupyingPiece.position)).toEqual(TileOccupation.OCCUPIED_BY_BLACK)
     })
 
-    test('returns indication that tile is empty', () => {
+    test("returns indication that tile is empty", () => {
       // given
       const position = {x: 0, y: 0}
       const notOccupyingPiece: Piece = {
@@ -239,8 +239,8 @@ describe('chessboard selectors', () => {
     })
   })
 
-  describe('next available piece id selector', () => {
-    test('returns next available piece id', () => {
+  describe("next available piece id selector", () => {
+    test("returns next available piece id", () => {
       // given
       const existingPiece: Piece = {
         id: 10,
@@ -260,7 +260,7 @@ describe('chessboard selectors', () => {
       expect(selectNextAvailablePieceId(state)).toEqual(existingPiece.id + 1)
     })
 
-    test('returns next available piece id when no pieces exist', () => {
+    test("returns next available piece id when no pieces exist", () => {
       // given
       const state = chessboardSlice({})
 

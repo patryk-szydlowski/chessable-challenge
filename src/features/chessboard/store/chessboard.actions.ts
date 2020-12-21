@@ -9,17 +9,17 @@ import {
 } from "features/chessboard/types"
 
 export const spawnPiece = createAsyncAction(
-  '@chessboard/spawn-piece/request',
-  '@chessboard/spawn-piece/success',
-  '@chessboard/spawn-piece/failure',
+  "@chessboard/spawn-piece/request",
+  "@chessboard/spawn-piece/success",
+  "@chessboard/spawn-piece/failure",
 )<SpawnPiece, SpawnedPiece, ChessboardError>()
 
 export const movePiece = createAsyncAction(
-  '@chessboard/move-piece/request',
-  '@chessboard/move-piece/success',
-  '@chessboard/move-piece/failure',
+  "@chessboard/move-piece/request",
+  "@chessboard/move-piece/success",
+  "@chessboard/move-piece/failure",
 )<MovePiece, MovedPiece, ChessboardError>()
 
 export const capturePiece = createAction(
-  '@chessboard/capture-piece',
+  "@chessboard/capture-piece",
 )<CapturedPiece>()

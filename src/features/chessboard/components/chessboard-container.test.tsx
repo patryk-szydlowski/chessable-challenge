@@ -9,10 +9,10 @@ jest.mock("./chessboard-tile-container", () => ({
   ChessboardTileContainer: () => <div data-testid="chessboard-tile"/>
 }))
 
-describe('chessboard container', () => {
+describe("chessboard container", () => {
   const mockStore = configureStore<ChessboardStateSlice>()
 
-  test('renders chessboard with board size from state', () => {
+  test("renders chessboard with board size from state", () => {
     // given
     const boardSize = 8
     const store = mockStore(chessboardSlice({boardSize}))

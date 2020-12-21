@@ -9,8 +9,8 @@ import {
 import {chessboardReducer} from "./chessboard.reducer"
 import {capturePiece, movePiece, spawnPiece} from "./chessboard.actions"
 
-describe('chessboard reducer', () => {
-  test('spawns piece on spawn piece success action', () => {
+describe("chessboard reducer", () => {
+  test("spawns piece on spawn piece success action", () => {
     // given
     const spawnedPiece: Piece = {
       id: 1,
@@ -35,7 +35,7 @@ describe('chessboard reducer', () => {
     expect(nextState).toEqual(expectedState)
   })
 
-  test('moves piece on move piece success action', () => {
+  test("moves piece on move piece success action", () => {
     // given
     const piece: Piece = {
       id: 0,
@@ -67,7 +67,7 @@ describe('chessboard reducer', () => {
     expect(nextState).toEqual(expectedState)
   })
 
-  test('captures piece on capture piece success action', () => {
+  test("captures piece on capture piece success action", () => {
     // given
     const capturedPiece: Piece = {
       id: 1,

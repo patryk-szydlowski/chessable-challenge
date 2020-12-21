@@ -6,7 +6,7 @@ import {Piece as PieceComponent} from "features/piece/components"
 import {Piece} from "features/piece/types"
 
 const TileBackground = styled(Box)<{ position: number }>`
-  background-color: ${props => props.position % 2 === 0 ? 'black' : 'white'};
+  background-color: ${props => props.position % 2 === 0 ? "black" : "white"};
   position: relative;
 `
 

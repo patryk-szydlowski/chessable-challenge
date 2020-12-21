@@ -7,14 +7,14 @@ import {render} from "@testing-library/react"
 import {Provider as StoreProvider} from "react-redux"
 import {ChessboardTileContainer} from "./chessboard-tile-container"
 
-jest.mock('features/piece/components', () => ({
+jest.mock("features/piece/components", () => ({
   Piece: () => <div data-testid="piece"/>
 }))
 
-describe('chessboard tile container', () => {
+describe("chessboard tile container", () => {
   const mockStore = configureStore<ChessboardStateSlice>()
 
-  test('renders chessboard tile with piece placed at tile position', () => {
+  test("renders chessboard tile with piece placed at tile position", () => {
     // given
     const piece: Piece = {
       id: 1,
@@ -40,7 +40,7 @@ describe('chessboard tile container', () => {
     expect(getByTestId("piece")).toBeInTheDocument()
   })
 
-  test('renders empty chessboard tile when no piece is placed at tile position', () => {
+  test("renders empty chessboard tile when no piece is placed at tile position", () => {
     // given
     const store = mockStore(chessboardSlice({}))
 
