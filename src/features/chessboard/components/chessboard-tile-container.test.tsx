@@ -1,11 +1,11 @@
-import {Map, Set} from "immutable";
+import {Map, Set} from "immutable"
 import configureStore from "redux-mock-store"
-import {ChessboardStateSlice} from "features/chessboard/types";
-import {Piece, PieceColor, PieceType} from "features/piece/types";
-import {chessboardSlice} from "../utils";
-import {render} from "@testing-library/react";
-import {Provider as StoreProvider} from "react-redux";
-import {ChessboardTileContainer} from "./chessboard-tile-container";
+import {ChessboardStateSlice} from "features/chessboard/types"
+import {Piece, PieceColor, PieceType} from "features/piece/types"
+import {chessboardSlice} from "../utils"
+import {render} from "@testing-library/react"
+import {Provider as StoreProvider} from "react-redux"
+import {ChessboardTileContainer} from "./chessboard-tile-container"
 
 jest.mock('features/piece/components', () => ({
   Piece: () => <div data-testid="piece"/>

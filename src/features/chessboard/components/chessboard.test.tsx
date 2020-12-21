@@ -1,5 +1,5 @@
-import {render} from "@testing-library/react";
-import {Chessboard} from "./chessboard";
+import {render} from "@testing-library/react"
+import {Chessboard} from "./chessboard"
 
 jest.mock("./chessboard-tile-container", () => ({
   ChessboardTileContainer: () => <div data-testid="chessboard-tile"/>

@@ -1,9 +1,9 @@
-import {Set} from "immutable";
-import {of} from "rxjs";
-import {filter, map, mergeMap, withLatestFrom} from "rxjs/operators";
-import {isActionOf} from "typesafe-actions";
+import {Set} from "immutable"
+import {of} from "rxjs"
+import {filter, map, mergeMap, withLatestFrom} from "rxjs/operators"
+import {isActionOf} from "typesafe-actions"
 import {ChessboardEpic, TileOccupation} from "features/chessboard/types"
-import {isLegalPieceMove} from "features/piece/moves";
+import {isLegalPieceMove} from "features/piece/moves"
 import {
   PieceMove,
   PieceMoveScenario,

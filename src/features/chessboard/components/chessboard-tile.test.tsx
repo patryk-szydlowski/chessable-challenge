@@ -1,7 +1,7 @@
-import {render} from "@testing-library/react";
+import {render} from "@testing-library/react"
 import {Set} from "immutable"
-import {Piece, PieceColor, PieceType} from "features/piece/types";
-import {ChessboardTile} from "./chessboard-tile";
+import {Piece, PieceColor, PieceType} from "features/piece/types"
+import {ChessboardTile} from "./chessboard-tile"
 
 jest.mock('features/piece/components', () => ({
   Piece: () => <div data-testid="piece"/>
