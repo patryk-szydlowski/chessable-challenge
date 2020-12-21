@@ -1,7 +1,7 @@
-import React from "react";
-import {ChessboardContainer} from "./board";
-import {ChessboardButtons} from "./board-buttons";
-import styled from "styled-components";
+import React from "react"
+import {ChessboardContainer} from "./board"
+import {ChessboardButtons} from "./board-buttons"
+import styled from "styled-components"
 
 const StyledPositioner = styled.div`
   display: flex;

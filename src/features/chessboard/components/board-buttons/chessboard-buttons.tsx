@@ -1,7 +1,7 @@
 import React from "react"
 import {ResetBoardButton} from "./reset-board-button"
 import {SpawnPawnButton} from "./spawn-pawn-button"
-import styled from "styled-components";
+import styled from "styled-components"
 
 const StyledChessboardButtons = styled.div`
   display: flex;
