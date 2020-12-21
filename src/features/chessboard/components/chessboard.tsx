@@ -29,5 +29,5 @@ export const Chessboard: React.VFC<Props> = ({boardSize}) => {
         />
       ))}
     </StyledChessboard>
-  );
+  )
 }
