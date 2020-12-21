@@ -3,7 +3,7 @@ import {of} from "rxjs"
 import {filter, map, mergeMap, withLatestFrom} from "rxjs/operators"
 import {isActionOf} from "typesafe-actions"
 import {pickRandom} from "common/utils"
-import {ChessboardEpic, TileOccupation} from "features/chessboard/types"
+import {ChessboardEpic} from "features/chessboard/types"
 import {isLegalPieceMove} from "features/piece/moves"
 import {
   PieceMove,
@@ -22,17 +22,17 @@ import {
   selectNextAvailablePieceId,
   selectPieceById,
   selectPieceByPosition,
-  selectTileOccupation
+  selectTileEmpty
 } from "./chessboard.selectors"
 
 export const spawnPieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
   filter(isActionOf(spawnPiece.request)),
   withLatestFrom(state$),
   map(([{payload: pieceSpawn}, state]) => {
-    const tileOccupation = selectTileOccupation(state)(pieceSpawn.position)
+    const tileEmpty = selectTileEmpty(state)(pieceSpawn.position)
     const pieceId = selectNextAvailablePieceId(state)
 
-    return tileOccupation === TileOccupation.EMPTY
+    return tileEmpty
       ? spawnPiece.success({
         spawnedPiece: {
           id: pieceId,

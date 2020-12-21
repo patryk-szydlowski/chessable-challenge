@@ -1,5 +1,4 @@
 import {Map, Set} from "immutable"
-import {TileOccupation} from "features/chessboard/types"
 import {chessboardSlice} from "features/chessboard/utils"
 import {Piece, PieceColor, PieceType, Position} from "features/piece/types"
 import {
@@ -11,7 +10,7 @@ import {
   selectPiecesById,
   selectPiecesByPosition,
   selectSelectedPieceId,
-  selectTileOccupation
+  selectTileEmpty
 } from "./chessboard.selectors"
 
 describe("chessboard selectors", () => {
@@ -191,7 +190,7 @@ describe("chessboard selectors", () => {
   })
 
   describe("tile occupation selector", () => {
-    test("returns indication that tile is occupied by white", () => {
+    test("returns indication that tile is not empty", () => {
       // given
       const occupyingPiece: Piece = {
         id: 0,
@@ -208,27 +207,7 @@ describe("chessboard selectors", () => {
       const state = chessboardSlice({pieces})
 
       // expect
-      expect(selectTileOccupation(state)(occupyingPiece.position)).toEqual(TileOccupation.OCCUPIED_BY_WHITE)
-    })
-
-    test("returns indication that tile is occupied by black", () => {
-      // given
-      const occupyingPiece: Piece = {
-        id: 0,
-        type: PieceType.PAWN,
-        color: PieceColor.BLACK,
-        position: {x: 2, y: 0},
-        specialStates: Set()
-      }
-
-      const pieces = Map([
-        [occupyingPiece.id, occupyingPiece],
-      ])
-
-      const state = chessboardSlice({pieces})
-
-      // expect
-      expect(selectTileOccupation(state)(occupyingPiece.position)).toEqual(TileOccupation.OCCUPIED_BY_BLACK)
+      expect(selectTileEmpty(state)(occupyingPiece.position)).toEqual(false)
     })
 
     test("returns indication that tile is empty", () => {
@@ -249,7 +228,7 @@ describe("chessboard selectors", () => {
       const state = chessboardSlice({pieces})
 
       // expect
-      expect(selectTileOccupation(state)(position)).toEqual(TileOccupation.EMPTY)
+      expect(selectTileEmpty(state)(position)).toEqual(true)
     })
   })
 

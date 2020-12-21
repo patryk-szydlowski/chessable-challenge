@@ -9,6 +9,7 @@ import {
   SpawnPiece,
   SpawnPieceAtRandomPosition
 } from "features/chessboard/types"
+import {Position} from "features/piece/types"
 
 export const spawnPiece = createAsyncAction(
   "@chessboard/spawn-piece/request",
@@ -43,3 +44,7 @@ export const unselectPiece = createAction(
 export const resetBoard = createAction(
   "@chessboard/reset-board"
 )<void>()
+
+export const interactWithTile = createAction(
+  "@chessboard/interact-with-tile"
+)<Position>()
