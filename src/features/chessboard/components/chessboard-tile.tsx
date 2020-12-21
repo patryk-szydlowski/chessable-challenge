@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import {Box} from "common/components"
+import {TILE_SIZE} from "features/chessboard/utils"
 import {Piece as PieceComponent} from "features/piece/components"
 import {Piece} from "features/piece/types"
 
@@ -20,20 +21,19 @@ const TilePieceContainer = styled.div`
 type Props = {
   row: number
   column: number
-  size: number
   piece?: Piece
 }
 
 export const ChessboardTile: React.VFC<Props> = (
-  {row, column, size, piece}
+  {row, column, piece}
 ) => (
-  <TileBackground position={row + column} size={size}>
+  <TileBackground position={row + column} size={TILE_SIZE}>
     {piece && (
       <TilePieceContainer>
         <PieceComponent
           color={piece.color}
           type={piece.type}
-          size={size}
+          size={TILE_SIZE}
         />
       </TilePieceContainer>
     )}
