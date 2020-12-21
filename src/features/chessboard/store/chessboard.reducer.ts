@@ -2,9 +2,11 @@ import {Action, createReducer} from "typesafe-actions"
 import {ChessboardState} from "features/chessboard/types"
 import {
   capturePiece,
-  resetBoard,
   movePiece,
-  spawnPiece
+  resetBoard,
+  selectPiece,
+  spawnPiece,
+  unselectPiece
 } from "./chessboard.actions"
 import {initialState} from "./chessboard.state"
 
@@ -20,5 +22,13 @@ export const chessboardReducer = createReducer<ChessboardState, Action>(initialS
   .handleAction(capturePiece, (state, {payload: {capturedPieceId}}) => ({
     ...state,
     pieces: state.pieces.delete(capturedPieceId)
+  }))
+  .handleAction(selectPiece, (state, {payload: {selectedPieceId}}) => ({
+    ...state,
+    selectedPieceId
+  }))
+  .handleAction(unselectPiece, (state) => ({
+    ...state,
+    selectedPieceId: undefined
   }))
   .handleAction(resetBoard, () => initialState)

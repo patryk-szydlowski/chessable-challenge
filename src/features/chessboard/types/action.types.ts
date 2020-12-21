@@ -2,14 +2,14 @@ import {
   Piece,
   PieceColor,
   PieceId,
-  PiecePosition,
+  Position,
   PieceType
 } from "features/piece/types"
 
 export type SpawnPiece = {
   type: PieceType
   color: PieceColor
-  position: PiecePosition
+  position: Position
 }
 
 export type SpawnedPiece = {
@@ -23,7 +23,7 @@ export type SpawnPieceAtRandomPosition = {
 
 export type MovePiece = {
   pieceId: PieceId
-  movePosition: PiecePosition
+  movePosition: Position
 }
 
 export type MovedPiece = {
@@ -32,4 +32,8 @@ export type MovedPiece = {
 
 export type CapturedPiece = {
   capturedPieceId: PieceId
+}
+
+export type SelectPiece = {
+  selectedPieceId: PieceId
 }

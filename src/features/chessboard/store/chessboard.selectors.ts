@@ -2,7 +2,7 @@ import {createSelector} from "reselect"
 import {matrix} from "common/utils"
 import {ChessboardStateSlice, TileOccupation} from "features/chessboard/types"
 import {serializePosition} from "features/chessboard/utils"
-import {PieceColor, PieceId, PiecePosition} from "features/piece/types"
+import {PieceColor, PieceId, Position} from "features/piece/types"
 
 const selectChessboardFeature = (state: ChessboardStateSlice) => state.chessboard
 
@@ -14,6 +14,11 @@ export const selectBoardSize = createSelector(
 export const selectPiecesById = createSelector(
   selectChessboardFeature,
   ({pieces}) => pieces
+)
+
+export const selectSelectedPieceId = createSelector(
+  selectChessboardFeature,
+  ({selectedPieceId}) => selectedPieceId
 )
 
 export const selectPiecesByPosition = createSelector(
@@ -28,14 +33,14 @@ export const selectPieceById = createSelector(
 
 export const selectPieceByPosition = createSelector(
   selectPiecesByPosition,
-  (piecesByPosition) => (position: PiecePosition) => {
+  (piecesByPosition) => (position: Position) => {
     return piecesByPosition.get(serializePosition(position))
   }
 )
 
 export const selectTileOccupation = createSelector(
   selectPieceByPosition,
-  (pieceByPositionSelector) => (position: PiecePosition) => {
+  (pieceByPositionSelector) => (position: Position) => {
     const piece = pieceByPositionSelector(position)
     if (!!piece) {
       switch (piece.color) {
@@ -57,8 +62,8 @@ export const selectNextAvailablePieceId = createSelector(
 export const selectEmptyPositions = createSelector(
   selectBoardSize,
   selectPieceByPosition,
-  (boardSize, pieceExists): PiecePosition[] =>
+  (boardSize, pieceByPositionSelector): Position[] =>
     matrix(boardSize)
       .map(([x, y]) => ({x, y}))
-      .filter(position => !pieceExists(position))
+      .filter(position => !pieceByPositionSelector(position))
 )

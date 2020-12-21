@@ -4,7 +4,7 @@ import {
   PieceColor,
   PieceMove,
   PieceMoveScenario,
-  PiecePosition,
+  Position,
   PieceType
 } from "features/piece/types"
 import {isLegalPieceMove} from "./piece.moves"
@@ -32,7 +32,7 @@ describe("piece moves", () => {
     expect(isLegalPieceMove(piece, move, boardSize)).toEqual(true)
   })
 
-  test.each<[string, PieceColor, PiecePosition, PieceMove]>([
+  test.each<[string, PieceColor, Position, PieceMove]>([
     [
       "x and y move offset do not match any legal moves",
       PieceColor.WHITE,

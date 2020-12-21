@@ -4,6 +4,7 @@ import {
   ChessboardError,
   MovedPiece,
   MovePiece,
+  SelectPiece,
   SpawnedPiece,
   SpawnPiece,
   SpawnPieceAtRandomPosition
@@ -30,6 +31,14 @@ export const movePiece = createAsyncAction(
 export const capturePiece = createAction(
   "@chessboard/capture-piece",
 )<CapturedPiece>()
+
+export const selectPiece = createAction(
+  "@chessboard/select-piece",
+)<SelectPiece>()
+
+export const unselectPiece = createAction(
+  "@chessboard/unselect-piece",
+)<void>()
 
 export const resetBoard = createAction(
   "@chessboard/reset-board"

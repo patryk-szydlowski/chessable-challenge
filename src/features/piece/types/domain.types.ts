@@ -13,7 +13,7 @@ export enum PieceSpecialState {
   FIRST_MOVE = "first-move"
 }
 
-export type PiecePosition = {
+export type Position = {
   x: number
   y: number
 }
@@ -24,7 +24,7 @@ export type Piece = {
   id: PieceId
   type: PieceType
   color: PieceColor
-  position: PiecePosition
+  position: Position
   specialStates: Set<PieceSpecialState>
 }
 

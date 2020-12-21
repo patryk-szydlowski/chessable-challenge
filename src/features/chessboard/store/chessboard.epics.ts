@@ -111,5 +111,5 @@ export const movePieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
 export const chessboardEpics = [
   spawnPieceEpic,
   spawnPieceAtRandomPositionEpic,
-  movePieceEpic
+  movePieceEpic,
 ]
