@@ -18,7 +18,7 @@ import {chessboardReducer} from "./chessboard.reducer"
 import {initialState} from "./chessboard.state"
 
 describe("chessboard reducer", () => {
-  test("spawns piece on spawn piece success action", () => {
+  test("spawns piece and unselects piece on spawn piece success action", () => {
     // given
     const spawnedPiece: Piece = {
       id: 1,
@@ -28,12 +28,15 @@ describe("chessboard reducer", () => {
       specialStates: Set([PieceSpecialState.FIRST_MOVE])
     }
 
-    const state = chessboardState({})
+    const state = chessboardState({
+      selectedPieceId: 1
+    })
 
     const action = spawnPiece.success({spawnedPiece})
 
     const expectedState = chessboardState({
-      pieces: Map([[spawnedPiece.id, spawnedPiece]])
+      pieces: Map([[spawnedPiece.id, spawnedPiece]]),
+      selectedPieceId: undefined
     })
 
     // when
@@ -43,7 +46,7 @@ describe("chessboard reducer", () => {
     expect(nextState).toEqual(expectedState)
   })
 
-  test("moves piece on move piece success action", () => {
+  test("moves piece and unselects piece on move piece success action", () => {
     // given
     const piece: Piece = {
       id: 0,
@@ -59,13 +62,15 @@ describe("chessboard reducer", () => {
     }
 
     const state = chessboardState({
-      pieces: Map([[piece.id, piece]])
+      pieces: Map([[piece.id, piece]]),
+      selectedPieceId: 1
     })
 
     const action = movePiece.success({movedPiece})
 
     const expectedState = chessboardState({
-      pieces: Map([[piece.id, movedPiece]])
+      pieces: Map([[piece.id, movedPiece]]),
+      selectedPieceId: undefined
     })
 
     // when
