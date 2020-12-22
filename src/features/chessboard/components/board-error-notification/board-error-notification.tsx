@@ -1,5 +1,5 @@
 import React from "react"
-import styled from "styled-components";
+import styled from "styled-components"
 import {ChessboardError} from "features/chessboard/types"
 import {TILE_SIZE} from "features/chessboard/utils"
 import {DismissErrorButton} from "./dismiss-error-button"

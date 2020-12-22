@@ -15,7 +15,7 @@ export const DismissErrorButton = styled.div`
   &::before,
   &::after {
     position: absolute;
-    content: '';
+    content: "";
     width: 100%;
     height: 3px;
     background-color: #8D0000;
