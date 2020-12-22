@@ -11,6 +11,8 @@ const StyledChessboard = styled.div<{ size: number }>`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap-reverse;
+
+  border: 1px solid black;
 `
 
 type Props = {
