@@ -124,6 +124,10 @@ export const interactWithBoardEpic: ChessboardEpic = (action$, state$) => action
     const tileIsLegalPieceMove = selectLegalMoveByPosition(state)(interactionPosition)
     const pieceAtPosition = selectPieceByPosition(state)(interactionPosition)
 
+    if (!!pieceAtPosition && pieceAtPosition.color === PieceColor.WHITE) {
+      return of(selectPiece({selectedPieceId: pieceAtPosition.id}))
+    }
+
     if (!!selectedPiece && tileIsLegalPieceMove) {
       return of(
         movePiece.request({
@@ -135,10 +139,6 @@ export const interactWithBoardEpic: ChessboardEpic = (action$, state$) => action
 
     if (!!selectedPiece && !tileIsLegalPieceMove) {
       return of(unselectPiece())
-    }
-
-    if (!!pieceAtPosition && pieceAtPosition.color === PieceColor.WHITE) {
-      return of(selectPiece({selectedPieceId: pieceAtPosition.id}))
     }
 
     return EMPTY
