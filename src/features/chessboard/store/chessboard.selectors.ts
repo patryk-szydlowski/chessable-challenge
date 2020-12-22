@@ -29,6 +29,11 @@ export const selectSelectedPieceId = createSelector(
   ({selectedPieceId}) => selectedPieceId
 )
 
+export const selectError = createSelector(
+  selectChessboardFeature,
+  ({error}) => error
+)
+
 export const selectPiecesByPosition = createSelector(
   selectPiecesById,
   (piecesById) => piecesById.mapKeys((_, {position}) => serializePosition(position))

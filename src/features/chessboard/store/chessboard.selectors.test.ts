@@ -1,4 +1,5 @@
 import {Map, Set} from "immutable"
+import {ChessboardError} from "features/chessboard/types"
 import {chessboardSlice} from "features/chessboard/utils"
 import {
   Piece,
@@ -10,6 +11,7 @@ import {
 import {
   selectBoardSize,
   selectEmptyPositions,
+  selectError,
   selectLegalMoveByPosition,
   selectLegalMovePositions,
   selectNextAvailablePieceId,
@@ -74,6 +76,18 @@ describe("chessboard selectors", () => {
 
       // expect
       expect(selectSelectedPieceId(state)).toEqual(selectedPieceId)
+    })
+  })
+
+  describe("error selector", () => {
+    test("returns error", () => {
+      // given
+      const error: ChessboardError = {message: "error message"}
+
+      const state = chessboardSlice({error})
+
+      // expect
+      expect(selectError(state)).toEqual(error)
     })
   })
 
