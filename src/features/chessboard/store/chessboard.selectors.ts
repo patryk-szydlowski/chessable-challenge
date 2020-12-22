@@ -5,10 +5,7 @@ import {ChessboardStateSlice} from "features/chessboard/types"
 import {serializePosition} from "features/chessboard/utils"
 import {isLegalPieceMove, legalPieceMoves} from "features/piece/moves"
 import {
-  LegalPieceMove,
-  Piece,
   PieceId,
-  PieceMove,
   PieceMoveScenario,
   PieceSpecialState,
   Position
@@ -78,38 +75,33 @@ export const selectLegalMovePositions = createSelector(
   selectBoardSize,
   selectSelectedPiece,
   selectPieceByPosition,
-  (boardSize, selectedPiece, pieceByPositionSelector) => {
-    if (!selectedPiece) {
-      return Set()
-    }
-
-    const {type, color, position, specialStates} = selectedPiece
-
-    // todo: fix first move
-    return legalPieceMoves(type, color)
-      .map<[LegalPieceMove, Piece | undefined]>(legalMove => {
-          const pieceAtPosition = pieceByPositionSelector({
-            x: position.x + legalMove.xOffset,
-            y: position.y + legalMove.yOffset
-          });
-          return [legalMove, pieceAtPosition]
-        }
-      )
-      .filter(([_, pieceAtPosition]) => !pieceAtPosition || pieceAtPosition.color !== color)
-      .map<PieceMove>(([{xOffset, yOffset}, pieceAtPosition]) => {
-        const scenario = !!pieceAtPosition
-          ? PieceMoveScenario.CAPTURE
-          : specialStates.has(PieceSpecialState.FIRST_MOVE)
-            ? PieceMoveScenario.FIRST_MOVE
-            : PieceMoveScenario.MOVE;
-        return ({xOffset, yOffset, scenario})
-      })
-      .filter(move => isLegalPieceMove(selectedPiece, move, boardSize))
-      .map(({xOffset, yOffset}) => ({
-        x: position.x + xOffset,
-        y: position.y + yOffset
-      }))
-  }
+  (boardSize, selectedPiece, pieceByPositionSelector) =>
+    !!selectedPiece
+      ? legalPieceMoves(selectedPiece.type, selectedPiece.color)
+        .map(legalMove => ({
+            legalMove,
+            pieceAtPosition: pieceByPositionSelector({
+              x: selectedPiece.position.x + legalMove.xOffset,
+              y: selectedPiece.position.y + legalMove.yOffset
+            })
+          })
+        )
+        .filter(({pieceAtPosition}) => !pieceAtPosition || pieceAtPosition.color !== selectedPiece.color)
+        .map(({legalMove: {xOffset, yOffset}, pieceAtPosition}) => ({
+          xOffset,
+          yOffset,
+          scenario: !!pieceAtPosition
+            ? PieceMoveScenario.CAPTURE
+            : selectedPiece.specialStates.has(PieceSpecialState.FIRST_MOVE)
+              ? PieceMoveScenario.FIRST_MOVE
+              : PieceMoveScenario.MOVE
+        }))
+        .filter(move => isLegalPieceMove(selectedPiece, move, boardSize))
+        .map(({xOffset, yOffset}) => ({
+          x: selectedPiece.position.x + xOffset,
+          y: selectedPiece.position.y + yOffset
+        }))
+      : Set()
 )
 
 export const selectLegalMoveByPosition = createSelector(
