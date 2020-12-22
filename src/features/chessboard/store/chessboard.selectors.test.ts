@@ -311,7 +311,6 @@ describe("chessboard selectors", () => {
     })
   })
 
-
   describe("legal move positions selector", () => {
     test("returns legal moves for selected piece", () => {
       // given
