@@ -422,13 +422,9 @@ describe("chessboard selectors", () => {
         id: 2,
         type: PieceType.PAWN,
         color: PieceColor.BLACK,
-        position: {x: 1, y: 2},
+        position: {x: 1, y: 1},
         specialStates: Set()
       }
-
-      const expectedLegalMovePositions: Set<Position> = Set([
-        {...selectedPiece.position, y: selectedPiece.position.y + 1},
-      ])
 
       const state = chessboardSlice({
         pieces: Map([
@@ -439,7 +435,7 @@ describe("chessboard selectors", () => {
       })
 
       // expect
-      expect(selectLegalMovePositions(state)).toEqual(expectedLegalMovePositions)
+      expect(selectLegalMovePositions(state)).toEqual(Set())
     })
 
     test("filters out capture moves when capture piece is of same color", () => {
