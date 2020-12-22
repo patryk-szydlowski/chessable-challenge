@@ -1,31 +1,18 @@
 import React from "react"
+import {Map} from "immutable"
 import styled from "styled-components"
 import {Box} from "common/components"
 import {PieceColor, PieceType} from "features/piece/types"
+import {Pawn} from "./pawn"
 
-const textColor = {
-  [PieceColor.WHITE]: "#FFFFFF",
-  [PieceColor.BLACK]: "#000000"
-}
+const pieces = Map([
+  [PieceType.PAWN, Pawn]
+])
 
-const strokeColor = {
-  [PieceColor.WHITE]: "#000000",
-  [PieceColor.BLACK]: "#FFFFFF"
-}
-
-// todo: replace with actual piece SVGs
-const PieceText = styled.div<{ pieceColor: PieceColor, size: number }>`
-  width: 100%;
-  height: 100%;
-
+const StyledPiece = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  color: ${props => textColor[props.pieceColor]};
-  -webkit-text-stroke: 1px ${props => strokeColor[props.pieceColor]};
-
-  font-size: ${props => props.size}px;
 `
 
 type Props = {
@@ -34,10 +21,13 @@ type Props = {
   size: number
 }
 
-export const Piece: React.FC<Props> = ({color, type, size}) => (
-  <Box size={size}>
-    <PieceText pieceColor={color} size={size}>
-      {type.charAt(0).toUpperCase()}
-    </PieceText>
-  </Box>
-)
+export const Piece: React.FC<Props> = React.memo(({color, type, size}) => {
+  const PieceComponent = pieces.get(type)
+  return (
+    <StyledPiece size={size}>
+      {PieceComponent && (
+        <PieceComponent color={color} size={size}/>
+      )}
+    </StyledPiece>
+  );
+})
