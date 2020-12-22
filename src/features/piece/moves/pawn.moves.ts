@@ -29,7 +29,7 @@ const leftSideCapture: LegalPieceMove = {
   legalScenarios: Set([PieceMoveScenario.CAPTURE])
 }
 
-const pawnMoves = [firstMove, move, rightSideCapture, leftSideCapture]
+const pawnMoves = Set([firstMove, move, rightSideCapture, leftSideCapture])
 
 export const pawnMovesByColor = Map([
   [PieceColor.WHITE, pawnMoves.map(offsetByPawnColor(PieceColor.WHITE))],

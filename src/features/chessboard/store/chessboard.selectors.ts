@@ -1,8 +1,18 @@
+import {Set} from "immutable"
 import {createSelector} from "reselect"
 import {matrix} from "common/utils"
 import {ChessboardStateSlice} from "features/chessboard/types"
 import {serializePosition} from "features/chessboard/utils"
-import {PieceId, Position} from "features/piece/types"
+import {isLegalPieceMove, legalPieceMoves} from "features/piece/moves"
+import {
+  LegalPieceMove,
+  Piece,
+  PieceId,
+  PieceMove,
+  PieceMoveScenario,
+  PieceSpecialState,
+  Position
+} from "features/piece/types"
 
 const selectChessboardFeature = (state: ChessboardStateSlice) => state.chessboard
 
@@ -33,9 +43,8 @@ export const selectPieceById = createSelector(
 
 export const selectPieceByPosition = createSelector(
   selectPiecesByPosition,
-  (piecesByPosition) => (position: Position) => {
-    return piecesByPosition.get(serializePosition(position))
-  }
+  (piecesByPosition) => (position: Position) =>
+    piecesByPosition.get(serializePosition(position))
 )
 
 export const selectTileEmpty = createSelector(
@@ -56,4 +65,55 @@ export const selectEmptyPositions = createSelector(
     matrix(boardSize)
       .map(([x, y]) => ({x, y}))
       .filter(position => !pieceByPositionSelector(position))
+)
+
+export const selectSelectedPiece = createSelector(
+  selectSelectedPieceId,
+  selectPieceById,
+  (selectedPieceId, pieceByIdSelector) =>
+    !!selectedPieceId ? pieceByIdSelector(selectedPieceId) : undefined
+)
+
+export const selectLegalMovePositions = createSelector(
+  selectBoardSize,
+  selectSelectedPiece,
+  selectPieceByPosition,
+  (boardSize, selectedPiece, pieceByPositionSelector) => {
+    if (!selectedPiece) {
+      return Set()
+    }
+
+    const {type, color, position, specialStates} = selectedPiece
+
+    // todo: fix first move
+    return legalPieceMoves(type, color)
+      .map<[LegalPieceMove, Piece | undefined]>(legalMove => {
+          const pieceAtPosition = pieceByPositionSelector({
+            x: position.x + legalMove.xOffset,
+            y: position.y + legalMove.yOffset
+          });
+          return [legalMove, pieceAtPosition]
+        }
+      )
+      .filter(([_, pieceAtPosition]) => !pieceAtPosition || pieceAtPosition.color !== color)
+      .map<PieceMove>(([{xOffset, yOffset}, pieceAtPosition]) => {
+        const scenario = !!pieceAtPosition
+          ? PieceMoveScenario.CAPTURE
+          : specialStates.has(PieceSpecialState.FIRST_MOVE)
+            ? PieceMoveScenario.FIRST_MOVE
+            : PieceMoveScenario.MOVE;
+        return ({xOffset, yOffset, scenario})
+      })
+      .filter(move => isLegalPieceMove(selectedPiece, move, boardSize))
+      .map(({xOffset, yOffset}) => ({
+        x: position.x + xOffset,
+        y: position.y + yOffset
+      }))
+  }
+)
+
+export const selectLegalMoveByPosition = createSelector(
+  selectLegalMovePositions,
+  (highlightedPositions) => (position: Position) =>
+    highlightedPositions.some(({x, y}) => x === position.x && y === position.y)
 )

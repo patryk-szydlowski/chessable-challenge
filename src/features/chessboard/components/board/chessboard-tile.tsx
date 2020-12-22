@@ -18,16 +18,30 @@ const TilePieceContainer = styled.div`
   right: 0;
 `
 
+const TileHighLight = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background-color: yellow;
+  opacity: 0.5;
+`
+
 type Props = {
   row: number
   column: number
+  highlighted: boolean
+  onClick: () => void
   piece?: Piece
 }
 
 export const ChessboardTile: React.VFC<Props> = (
-  {row, column, piece}
+  {row, column, highlighted, piece, onClick}
 ) => (
-  <TileBackground position={row + column} size={TILE_SIZE}>
+  <TileBackground position={row + column} size={TILE_SIZE} onClick={onClick}>
+    {highlighted && <TileHighLight/>}
     {piece && (
       <TilePieceContainer>
         <PieceComponent

@@ -1,6 +1,11 @@
 import React from "react"
-import {useSelector} from "react-redux"
-import {selectPieceByPosition} from "features/chessboard/store"
+import {useDispatch, useSelector} from "react-redux"
+import {
+  interactWithTile,
+  selectPieceByPosition,
+  selectLegalMoveByPosition
+} from "features/chessboard/store"
+import {Position} from "features/piece/types"
 import {ChessboardTile} from "./chessboard-tile"
 
 type Props = {
@@ -9,6 +14,20 @@ type Props = {
 }
 
 export const ChessboardTileContainer: React.VFC<Props> = ({row, column}) => {
-  const piece = useSelector(selectPieceByPosition)({x: column, y: row})
-  return <ChessboardTile row={row} column={column} piece={piece}/>
+  const position: Position = {x: column, y: row}
+  const piece = useSelector(selectPieceByPosition)(position)
+  const highlighted = useSelector(selectLegalMoveByPosition)(position)
+
+  const dispatch = useDispatch()
+  const interactWithTileOnClick = () => dispatch(interactWithTile(position))
+
+  return (
+    <ChessboardTile
+      row={row}
+      column={column}
+      highlighted={highlighted}
+      piece={piece}
+      onClick={interactWithTileOnClick}
+    />
+  )
 }

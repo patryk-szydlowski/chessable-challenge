@@ -6,22 +6,28 @@ import {pickRandom} from "common/utils"
 import {ChessboardEpic} from "features/chessboard/types"
 import {isLegalPieceMove} from "features/piece/moves"
 import {
+  PieceColor,
   PieceMove,
   PieceMoveScenario,
   PieceSpecialState
 } from "features/piece/types"
 import {
   capturePiece,
+  interactWithTile,
   movePiece,
+  selectPiece,
   spawnPiece,
-  spawnPieceAtRandomPosition
+  spawnPieceAtRandomPosition,
+  unselectPiece
 } from "./chessboard.actions"
 import {
   selectBoardSize,
   selectEmptyPositions,
+  selectLegalMoveByPosition,
   selectNextAvailablePieceId,
   selectPieceById,
   selectPieceByPosition,
+  selectSelectedPiece,
   selectTileEmpty
 } from "./chessboard.selectors"
 
@@ -108,8 +114,32 @@ export const movePieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
   })
 )
 
+export const interactWithTileEpic: ChessboardEpic = (action$, state$) => action$.pipe(
+  filter(isActionOf(interactWithTile)),
+  withLatestFrom(state$),
+  mergeMap(([{payload: position}, state]) => {
+    const selectedPiece = selectSelectedPiece(state)
+    const tileIsLegalPieceMove = selectLegalMoveByPosition(state)(position)
+    const pieceAtPosition = selectPieceByPosition(state)(position)
+
+    if (!!selectedPiece && tileIsLegalPieceMove) {
+      return of(
+        movePiece.request({pieceId: selectedPiece.id, movePosition: position}),
+        unselectPiece()
+      )
+    }
+
+    if (!!pieceAtPosition && pieceAtPosition.color === PieceColor.WHITE) {
+      return of(selectPiece({selectedPieceId: pieceAtPosition.id}))
+    }
+
+    return of(unselectPiece())
+  })
+)
+
 export const chessboardEpics = [
   spawnPieceEpic,
   spawnPieceAtRandomPositionEpic,
   movePieceEpic,
+  interactWithTileEpic
 ]

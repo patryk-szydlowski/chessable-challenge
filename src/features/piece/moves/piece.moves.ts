@@ -1,4 +1,4 @@
-import {Map} from "immutable"
+import {Map, Set} from "immutable"
 import {
   LegalPieceMove,
   Piece,
@@ -18,11 +18,11 @@ export function isLegalPieceMove(piece: Piece, move: PieceMove, boardSize: numbe
   return isMoveLegal(move, legalMoves) && isMoveWithinBoard(piece, move, boardSize)
 }
 
-function legalPieceMoves(type: PieceType, color: PieceColor) {
-  return pieceMovesByType.get(type)?.get(color) ?? []
+export function legalPieceMoves(type: PieceType, color: PieceColor): Set<LegalPieceMove> {
+  return pieceMovesByType.get(type)?.get(color) ?? Set()
 }
 
-function isMoveLegal(move: PieceMove, legalMoves: LegalPieceMove[]): boolean {
+function isMoveLegal(move: PieceMove, legalMoves: Set<LegalPieceMove>): boolean {
   return legalMoves.some(moveIsAllowed(move))
 }
 
