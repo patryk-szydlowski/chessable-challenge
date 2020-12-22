@@ -1,7 +1,7 @@
 import {render} from "@testing-library/react"
 import {Chessboard} from "./chessboard"
 
-jest.mock("./chessboard-tile-container", () => ({
+jest.mock("./board-tile", () => ({
   ChessboardTileContainer: () => <div data-testid="chessboard-tile"/>
 }))
 

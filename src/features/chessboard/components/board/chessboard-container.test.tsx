@@ -5,7 +5,7 @@ import {Provider as StoreProvider} from "react-redux"
 import {chessboardSlice} from "../../utils"
 import {ChessboardContainer} from "./chessboard-container"
 
-jest.mock("./chessboard-tile-container", () => ({
+jest.mock("./board-tile", () => ({
   ChessboardTileContainer: () => <div data-testid="chessboard-tile"/>
 }))
 
