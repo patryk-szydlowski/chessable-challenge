@@ -13,11 +13,13 @@ import {initialState} from "./chessboard.state"
 export const chessboardReducer = createReducer<ChessboardState, Action>(initialState)
   .handleAction(spawnPiece.success, (state, {payload: {spawnedPiece}}) => ({
     ...state,
-    pieces: state.pieces.set(spawnedPiece.id, spawnedPiece)
+    pieces: state.pieces.set(spawnedPiece.id, spawnedPiece),
+    selectedPieceId: undefined,
   }))
   .handleAction(movePiece.success, (state, {payload: {movedPiece}}) => ({
     ...state,
-    pieces: state.pieces.set(movedPiece.id, movedPiece)
+    pieces: state.pieces.set(movedPiece.id, movedPiece),
+    selectedPieceId: undefined,
   }))
   .handleAction(capturePiece, (state, {payload: {capturedPieceId}}) => ({
     ...state,

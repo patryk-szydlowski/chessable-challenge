@@ -16,5 +16,5 @@ export function matrix(size: number): [number, number][] {
 }
 
 export function pickRandom<A>(array: A[]): A | undefined {
-  return array[Math.floor(Math.random() * (array.length + 1))]
+  return array[Math.floor(Math.random() * array.length)]
 }

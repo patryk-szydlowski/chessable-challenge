@@ -119,7 +119,7 @@ describe("chessboard epics", () => {
       }
 
       const thirdPiece: Piece = {
-        id: 1,
+        id: 3,
         position: {x: 0, y: 1},
         type: PieceType.PAWN,
         color: PieceColor.WHITE,

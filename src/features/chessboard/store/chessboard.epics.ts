@@ -1,5 +1,5 @@
 import {Set} from "immutable"
-import {of} from "rxjs"
+import {EMPTY, of} from "rxjs"
 import {filter, map, mergeMap, withLatestFrom} from "rxjs/operators"
 import {isActionOf} from "typesafe-actions"
 import {pickRandom} from "common/utils"
@@ -124,16 +124,19 @@ export const interactWithTileEpic: ChessboardEpic = (action$, state$) => action$
 
     if (!!selectedPiece && tileIsLegalPieceMove) {
       return of(
-        movePiece.request({pieceId: selectedPiece.id, movePosition: position}),
-        unselectPiece()
+        movePiece.request({pieceId: selectedPiece.id, movePosition: position})
       )
+    }
+
+    if (!!selectedPiece && !tileIsLegalPieceMove) {
+      return of(unselectPiece())
     }
 
     if (!!pieceAtPosition && pieceAtPosition.color === PieceColor.WHITE) {
       return of(selectPiece({selectedPieceId: pieceAtPosition.id}))
     }
 
-    return of(unselectPiece())
+    return EMPTY
   })
 )
 
