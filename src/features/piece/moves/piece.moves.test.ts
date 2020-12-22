@@ -21,7 +21,7 @@ describe("piece moves", () => {
     }
 
     const move: PieceMove = {
-      offset: {xOffset: 0, yOffset: 1,},
+      offset: {xOffset: 0, yOffset: 1},
       scenario: PieceMoveScenario.MOVE
     }
 

@@ -408,6 +408,40 @@ describe("chessboard selectors", () => {
       expect(selectLegalMovePositions(state)).toEqual(expectedLegalMovePositions)
     })
 
+    test("filters out first move legal moves when piece is blocking the path", () => {
+      // given
+      const selectedPiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 0},
+        specialStates: Set([PieceSpecialState.FIRST_MOVE])
+      }
+
+      const pathBlockingPiece: Piece = {
+        id: 2,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 1, y: 2},
+        specialStates: Set()
+      }
+
+      const expectedLegalMovePositions: Set<Position> = Set([
+        {...selectedPiece.position, y: selectedPiece.position.y + 1},
+      ])
+
+      const state = chessboardSlice({
+        pieces: Map([
+          [selectedPiece.id, selectedPiece],
+          [pathBlockingPiece.id, pathBlockingPiece],
+        ]),
+        selectedPieceId: selectedPiece.id
+      })
+
+      // expect
+      expect(selectLegalMovePositions(state)).toEqual(expectedLegalMovePositions)
+    })
+
     test("filters out capture moves when capture piece is of same color", () => {
       // given
       const selectedPiece: Piece = {

@@ -46,5 +46,6 @@ export type PieceMove = {
 
 export type LegalPieceMove = {
   offset: PieceOffset
+  requiredFreeOffsets: Set<PieceOffset>
   legalScenarios: Set<PieceMoveScenario>
 }

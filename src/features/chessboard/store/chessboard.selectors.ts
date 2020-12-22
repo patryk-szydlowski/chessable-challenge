@@ -88,6 +88,12 @@ export const selectLegalMovePositions = createSelector(
           })
         )
         .filter(({pieceAtPosition}) => !pieceAtPosition || pieceAtPosition.color !== selectedPiece.color)
+        .filter(({legalMove: {requiredFreeOffsets}}) => requiredFreeOffsets
+          .every(({xOffset, yOffset}) => !pieceByPositionSelector({
+            x: selectedPiece.position.x + xOffset,
+            y: selectedPiece.position.y + yOffset
+          }))
+        )
         .map<PieceMove>(({legalMove: {offset}, pieceAtPosition}) => ({
           offset,
           scenario: !!pieceAtPosition
