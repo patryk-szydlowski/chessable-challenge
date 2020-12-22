@@ -13,7 +13,7 @@ import {
 } from "features/piece/types"
 import {
   capturePiece,
-  interactWithTile,
+  interactWithBoard,
   movePiece,
   selectPiece,
   spawnPiece,
@@ -114,17 +114,20 @@ export const movePieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
   })
 )
 
-export const interactWithTileEpic: ChessboardEpic = (action$, state$) => action$.pipe(
-  filter(isActionOf(interactWithTile)),
+export const interactWithBoardEpic: ChessboardEpic = (action$, state$) => action$.pipe(
+  filter(isActionOf(interactWithBoard)),
   withLatestFrom(state$),
-  mergeMap(([{payload: position}, state]) => {
+  mergeMap(([{payload: {interactionPosition}}, state]) => {
     const selectedPiece = selectSelectedPiece(state)
-    const tileIsLegalPieceMove = selectLegalMoveByPosition(state)(position)
-    const pieceAtPosition = selectPieceByPosition(state)(position)
+    const tileIsLegalPieceMove = selectLegalMoveByPosition(state)(interactionPosition)
+    const pieceAtPosition = selectPieceByPosition(state)(interactionPosition)
 
     if (!!selectedPiece && tileIsLegalPieceMove) {
       return of(
-        movePiece.request({pieceId: selectedPiece.id, movePosition: position})
+        movePiece.request({
+          pieceId: selectedPiece.id,
+          movePosition: interactionPosition
+        })
       )
     }
 
@@ -144,5 +147,5 @@ export const chessboardEpics = [
   spawnPieceEpic,
   spawnPieceAtRandomPositionEpic,
   movePieceEpic,
-  interactWithTileEpic
+  interactWithBoardEpic
 ]

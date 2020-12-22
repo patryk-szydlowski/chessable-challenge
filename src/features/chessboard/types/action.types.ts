@@ -37,3 +37,7 @@ export type CapturedPiece = {
 export type SelectPiece = {
   selectedPieceId: PieceId
 }
+
+export type InteractWithBoard = {
+  interactionPosition: Position
+}

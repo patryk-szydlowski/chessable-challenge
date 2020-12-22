@@ -2,6 +2,7 @@ import {createAction, createAsyncAction} from "typesafe-actions"
 import {
   CapturedPiece,
   ChessboardError,
+  InteractWithBoard,
   MovedPiece,
   MovePiece,
   SelectPiece,
@@ -9,7 +10,6 @@ import {
   SpawnPiece,
   SpawnPieceAtRandomPosition
 } from "features/chessboard/types"
-import {Position} from "features/piece/types"
 
 export const spawnPiece = createAsyncAction(
   "@chessboard/spawn-piece/request",
@@ -45,6 +45,6 @@ export const resetBoard = createAction(
   "@chessboard/reset-board"
 )<void>()
 
-export const interactWithTile = createAction(
-  "@chessboard/interact-with-tile"
-)<Position>()
+export const interactWithBoard = createAction(
+  "@chessboard/interact-with-board"
+)<InteractWithBoard>()
