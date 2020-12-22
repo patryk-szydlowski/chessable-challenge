@@ -535,7 +535,7 @@ describe("chessboard epics", () => {
       const actions$ = actions(context.hot("a", {a: interactWithBoard(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot("-")
+      const expected = context.hot("")
 
       // when
       const result = interactWithBoardEpic(actions$, state$, {})
@@ -565,7 +565,7 @@ describe("chessboard epics", () => {
       const actions$ = actions(context.hot("a", {a: interactWithBoard(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot("-")
+      const expected = context.hot("")
 
       // when
       const result = interactWithBoardEpic(actions$, state$, {})
