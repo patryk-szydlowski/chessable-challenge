@@ -1,9 +1,17 @@
 import {Map, Set} from "immutable"
 import {chessboardSlice} from "features/chessboard/utils"
-import {Piece, PieceColor, PieceType, Position} from "features/piece/types"
+import {
+  Piece,
+  PieceColor,
+  PieceSpecialState,
+  PieceType,
+  Position
+} from "features/piece/types"
 import {
   selectBoardSize,
   selectEmptyPositions,
+  selectLegalMoveByPosition,
+  selectLegalMovePositions,
   selectNextAvailablePieceId,
   selectPieceById,
   selectPieceByPosition,
@@ -286,6 +294,225 @@ describe("chessboard selectors", () => {
 
       // expect
       expect(selectEmptyPositions(state)).toEqual(expectedEmptyPositions)
+    })
+  })
+
+
+  describe("legal move positions selector", () => {
+    test("returns legal moves for selected piece", () => {
+      // given
+      const selectedPiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 0},
+        specialStates: Set([PieceSpecialState.FIRST_MOVE])
+      }
+
+      const firstPieceToCapture: Piece = {
+        id: 2,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 2, y: 1},
+        specialStates: Set()
+      }
+
+      const secondPieceToCapture: Piece = {
+        id: 3,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 0, y: 1},
+        specialStates: Set()
+      }
+
+      const expectedLegalMovePositions: Set<Position> = Set([
+        {...selectedPiece.position, y: selectedPiece.position.y + 1},
+        {...selectedPiece.position, y: selectedPiece.position.y + 2},
+        firstPieceToCapture.position,
+        secondPieceToCapture.position
+      ])
+
+      const state = chessboardSlice({
+        pieces: Map([
+          [selectedPiece.id, selectedPiece],
+          [firstPieceToCapture.id, firstPieceToCapture],
+          [secondPieceToCapture.id, secondPieceToCapture]
+        ]),
+        selectedPieceId: selectedPiece.id
+      })
+
+      // expect
+      expect(selectLegalMovePositions(state)).toEqual(expectedLegalMovePositions)
+    })
+
+    test("returns empty set when no piece is selected", () => {
+      // given
+      const existingPiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 0},
+        specialStates: Set([PieceSpecialState.FIRST_MOVE])
+      }
+
+      const state = chessboardSlice({
+        pieces: Map([[existingPiece.id, existingPiece]]),
+      })
+
+      // expect
+      expect(selectLegalMovePositions(state)).toEqual(Set())
+    })
+
+    test("filters out first move legal moves when selected piece already moved", () => {
+      // given
+      const selectedPiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 0},
+        specialStates: Set()
+      }
+
+      const firstPieceToCapture: Piece = {
+        id: 2,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 2, y: 1},
+        specialStates: Set()
+      }
+
+      const secondPieceToCapture: Piece = {
+        id: 3,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 0, y: 1},
+        specialStates: Set()
+      }
+
+      const expectedLegalMovePositions: Set<Position> = Set([
+        {...selectedPiece.position, y: selectedPiece.position.y + 1},
+        firstPieceToCapture.position,
+        secondPieceToCapture.position
+      ])
+
+      const state = chessboardSlice({
+        pieces: Map([
+          [selectedPiece.id, selectedPiece],
+          [firstPieceToCapture.id, firstPieceToCapture],
+          [secondPieceToCapture.id, secondPieceToCapture]
+        ]),
+        selectedPieceId: selectedPiece.id
+      })
+
+      // expect
+      expect(selectLegalMovePositions(state)).toEqual(expectedLegalMovePositions)
+    })
+
+    test("filters out capture moves when capture piece is of same color", () => {
+      // given
+      const selectedPiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 0},
+        specialStates: Set([PieceSpecialState.FIRST_MOVE])
+      }
+
+      const firstPieceToCapture: Piece = {
+        id: 2,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 2, y: 1},
+        specialStates: Set()
+      }
+
+      const sameColorPieceToCapture: Piece = {
+        id: 3,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 0, y: 1},
+        specialStates: Set()
+      }
+
+      const expectedLegalMovePositions: Set<Position> = Set([
+        {...selectedPiece.position, y: selectedPiece.position.y + 1},
+        {...selectedPiece.position, y: selectedPiece.position.y + 2},
+        firstPieceToCapture.position,
+      ])
+
+      const state = chessboardSlice({
+        pieces: Map([
+          [selectedPiece.id, selectedPiece],
+          [firstPieceToCapture.id, firstPieceToCapture],
+          [sameColorPieceToCapture.id, sameColorPieceToCapture]
+        ]),
+        selectedPieceId: selectedPiece.id
+      })
+
+      // expect
+      expect(selectLegalMovePositions(state)).toEqual(expectedLegalMovePositions)
+    })
+  })
+
+  describe("legal move by position selector", () => {
+    test("returns true when position is a legal move for selected piece", () => {
+      // given
+      const selectedPiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 0},
+        specialStates: Set()
+      }
+
+      const position: Position = {x: 1, y: 1}
+
+      const state = chessboardSlice({
+        pieces: Map([[selectedPiece.id, selectedPiece]]),
+        selectedPieceId: selectedPiece.id
+      })
+
+      // expect
+      expect(selectLegalMoveByPosition(state)(position)).toEqual(true)
+    })
+
+    test("returns false when position is not a legal move for selected piece", () => {
+      // given
+      const selectedPiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 0},
+        specialStates: Set()
+      }
+
+      const position: Position = {x: 2, y: 1}
+
+      const state = chessboardSlice({
+        pieces: Map([[selectedPiece.id, selectedPiece]]),
+        selectedPieceId: selectedPiece.id
+      })
+
+      // expect
+      expect(selectLegalMoveByPosition(state)(position)).toEqual(false)
+    })
+
+    test("returns false when no piece is selected", () => {
+      // given
+      const existingPiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 0},
+        specialStates: Set([PieceSpecialState.FIRST_MOVE])
+      }
+
+      const state = chessboardSlice({
+        pieces: Map([[existingPiece.id, existingPiece]]),
+      })
+
+      // expect
+      expect(selectLegalMoveByPosition(state)(existingPiece.position)).toEqual(false)
     })
   })
 })
