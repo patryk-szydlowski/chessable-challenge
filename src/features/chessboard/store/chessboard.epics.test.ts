@@ -3,6 +3,7 @@ import {of} from "rxjs"
 import {marbles} from "rxjs-marbles/jest"
 import {actions, state} from "common/utils"
 import {
+  InteractWithBoard,
   MovePiece,
   SpawnPiece,
   SpawnPieceAtRandomPosition
@@ -15,15 +16,19 @@ import {
   PieceType
 } from "features/piece/types"
 import {
+  interactWithBoardEpic,
   movePieceEpic,
   spawnPieceAtRandomPositionEpic,
   spawnPieceEpic
 } from "./chessboard.epics"
 import {
   capturePiece,
+  interactWithBoard,
   movePiece,
+  selectPiece,
   spawnPiece,
-  spawnPieceAtRandomPosition
+  spawnPieceAtRandomPosition,
+  unselectPiece
 } from "./chessboard.actions"
 
 describe("chessboard epics", () => {
@@ -413,6 +418,157 @@ describe("chessboard epics", () => {
 
       // when
       const result = movePieceEpic(actions$, state$, {})
+
+      // then
+      context.expect(result).toBeObservable(expected)
+    }))
+  })
+
+  describe("interact with board epic", () => {
+    test("returns move piece request when piece is selected and move is legal", marbles((context) => {
+      // given
+      const pieceToMove: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 1},
+        specialStates: Set()
+      }
+
+      const slice = chessboardSlice({
+        pieces: Map([[pieceToMove.id, pieceToMove]]),
+        selectedPieceId: pieceToMove.id
+      })
+
+      const payload: InteractWithBoard = {
+        interactionPosition: {x: 1, y: 2}
+      }
+
+      const actions$ = actions(context.hot("a", {a: interactWithBoard(payload)}))
+      const state$ = state(of(slice))
+
+      const expected = context.hot("a", {
+        a: movePiece.request({
+          pieceId: pieceToMove.id,
+          movePosition: payload.interactionPosition
+        })
+      })
+
+      // when
+      const result = interactWithBoardEpic(actions$, state$, {})
+
+      // then
+      context.expect(result).toBeObservable(expected)
+    }))
+
+    test("returns unselect piece when piece is selected and move is illegal", marbles((context) => {
+      // given
+      const pieceToMove: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 1},
+        specialStates: Set()
+      }
+
+      const slice = chessboardSlice({
+        pieces: Map([[pieceToMove.id, pieceToMove]]),
+        selectedPieceId: pieceToMove.id
+      })
+
+      const payload: InteractWithBoard = {
+        interactionPosition: {x: 1, y: 3}
+      }
+
+      const actions$ = actions(context.hot("a", {a: interactWithBoard(payload)}))
+      const state$ = state(of(slice))
+
+      const expected = context.hot("a", {a: unselectPiece()})
+
+      // when
+      const result = interactWithBoardEpic(actions$, state$, {})
+
+      // then
+      context.expect(result).toBeObservable(expected)
+    }))
+
+    test("returns select piece when piece is not selected and piece at position is selectable", marbles((context) => {
+      // given
+      const pieceToSelect: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.WHITE,
+        position: {x: 1, y: 1},
+        specialStates: Set()
+      }
+
+      const slice = chessboardSlice({
+        pieces: Map([[pieceToSelect.id, pieceToSelect]]),
+      })
+
+      const payload: InteractWithBoard = {
+        interactionPosition: pieceToSelect.position
+      }
+
+      const actions$ = actions(context.hot("a", {a: interactWithBoard(payload)}))
+      const state$ = state(of(slice))
+
+      const expected = context.hot("a", {a: selectPiece({selectedPieceId: pieceToSelect.id})})
+
+      // when
+      const result = interactWithBoardEpic(actions$, state$, {})
+
+      // then
+      context.expect(result).toBeObservable(expected)
+    }))
+
+    test("returns no action when piece is not selected and there is no piece at position", marbles((context) => {
+      // given
+      const slice = chessboardSlice({
+        pieces: Map(),
+      })
+
+      const payload: InteractWithBoard = {
+        interactionPosition: {x: 0, y: 0}
+      }
+
+      const actions$ = actions(context.hot("a", {a: interactWithBoard(payload)}))
+      const state$ = state(of(slice))
+
+      const expected = context.hot("-")
+
+      // when
+      const result = interactWithBoardEpic(actions$, state$, {})
+
+      // then
+      context.expect(result).toBeObservable(expected)
+    }))
+
+    test("returns no action when piece is not selected and there is an unselectable piece at position", marbles((context) => {
+      // given
+      const unselectablePiece: Piece = {
+        id: 1,
+        type: PieceType.PAWN,
+        color: PieceColor.BLACK,
+        position: {x: 1, y: 1},
+        specialStates: Set()
+      }
+
+      const slice = chessboardSlice({
+        pieces: Map([[unselectablePiece.id, unselectablePiece]]),
+      })
+
+      const payload: InteractWithBoard = {
+        interactionPosition: unselectablePiece.position
+      }
+
+      const actions$ = actions(context.hot("a", {a: interactWithBoard(payload)}))
+      const state$ = state(of(slice))
+
+      const expected = context.hot("-")
+
+      // when
+      const result = interactWithBoardEpic(actions$, state$, {})
 
       // then
       context.expect(result).toBeObservable(expected)
