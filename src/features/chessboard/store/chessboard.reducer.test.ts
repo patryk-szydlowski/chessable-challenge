@@ -9,6 +9,7 @@ import {
 } from "features/piece/types"
 import {
   capturePiece,
+  dismissError,
   movePiece,
   resetBoard,
   selectPiece,
@@ -171,6 +172,22 @@ describe("chessboard reducer", () => {
     const action = actionCreator(error)
 
     const expectedState = chessboardState({error})
+
+    // when
+    const nextState = chessboardReducer(state, action)
+
+    // then
+    expect(nextState).toEqual(expectedState)
+  })
+
+  test("removes error on dismiss error action", () => {
+    // given
+    const error: ChessboardError = {message: "error message"}
+    const state = chessboardState({error})
+
+    const action = dismissError()
+
+    const expectedState = chessboardState({})
 
     // when
     const nextState = chessboardReducer(state, action)

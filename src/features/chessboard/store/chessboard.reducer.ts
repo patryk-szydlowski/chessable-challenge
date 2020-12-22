@@ -2,6 +2,7 @@ import {Action, createReducer} from "typesafe-actions"
 import {ChessboardState} from "features/chessboard/types"
 import {
   capturePiece,
+  dismissError,
   movePiece,
   resetBoard,
   selectPiece,
@@ -42,4 +43,8 @@ export const chessboardReducer = createReducer<ChessboardState, Action>(initialS
   ], (state, {payload: error}) => ({
     ...state,
     error
+  }))
+  .handleAction(dismissError, (state) => ({
+    ...state,
+    error: undefined
   }))

@@ -41,10 +41,14 @@ export const unselectPiece = createAction(
   "@chessboard/unselect-piece",
 )<void>()
 
+export const interactWithBoard = createAction(
+  "@chessboard/interact-with-board"
+)<InteractWithBoard>()
+
 export const resetBoard = createAction(
   "@chessboard/reset-board"
 )<void>()
 
-export const interactWithBoard = createAction(
-  "@chessboard/interact-with-board"
-)<InteractWithBoard>()
+export const dismissError = createAction(
+  "@chessboard/dismiss-error"
+)<void>()

@@ -1,7 +1,8 @@
 import React from "react"
+import styled from "styled-components"
 import {ChessboardContainer} from "./board"
 import {ChessboardButtons} from "./board-buttons"
-import styled from "styled-components"
+import {BoardErrorNotificationContainer} from "./board-error-notification"
 
 const StyledPositioner = styled.div`
   display: flex;
@@ -19,10 +20,6 @@ const StyledInteractiveChessboard = styled.div`
   width: fit-content;
   display: flex;
   flex-direction: column;
-
-  padding: 10px;
-
-  background-color: lightgray;
 `
 
 export const InteractiveChessboard: React.VFC = () => (
@@ -31,6 +28,8 @@ export const InteractiveChessboard: React.VFC = () => (
       <ChessboardContainer/>
       <Spacer/>
       <ChessboardButtons/>
+      <Spacer/>
+      <BoardErrorNotificationContainer/>
     </StyledInteractiveChessboard>
   </StyledPositioner>
 )
