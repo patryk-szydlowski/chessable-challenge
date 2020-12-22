@@ -6,6 +6,7 @@ import {serializePosition} from "features/chessboard/utils"
 import {isLegalPieceMove, legalPieceMoves} from "features/piece/moves"
 import {
   PieceId,
+  PieceMove,
   PieceMoveScenario,
   PieceSpecialState,
   Position
@@ -87,9 +88,8 @@ export const selectLegalMovePositions = createSelector(
           })
         )
         .filter(({pieceAtPosition}) => !pieceAtPosition || pieceAtPosition.color !== selectedPiece.color)
-        .map(({legalMove: {xOffset, yOffset}, pieceAtPosition}) => ({
-          xOffset,
-          yOffset,
+        .map<PieceMove>(({legalMove: {xOffset, yOffset}, pieceAtPosition}) => ({
+          offset: {xOffset, yOffset},
           scenario: !!pieceAtPosition
             ? PieceMoveScenario.CAPTURE
             : selectedPiece.specialStates.has(PieceSpecialState.FIRST_MOVE)
@@ -97,7 +97,7 @@ export const selectLegalMovePositions = createSelector(
               : PieceMoveScenario.MOVE
         }))
         .filter(move => isLegalPieceMove(selectedPiece, move, boardSize))
-        .map(({xOffset, yOffset}) => ({
+        .map(({offset: {xOffset, yOffset}}) => ({
           x: selectedPiece.position.x + xOffset,
           y: selectedPiece.position.y + yOffset
         }))

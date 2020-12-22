@@ -34,9 +34,13 @@ export enum PieceMoveScenario {
   CAPTURE = "capture"
 }
 
-export type PieceMove = {
+export type PieceOffset = {
   xOffset: number
   yOffset: number
+}
+
+export type PieceMove = {
+  offset: PieceOffset
   scenario: PieceMoveScenario
 }
 

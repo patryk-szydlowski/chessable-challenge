@@ -26,15 +26,15 @@ function isMoveLegal(move: PieceMove, legalMoves: Set<LegalPieceMove>): boolean 
   return legalMoves.some(moveIsAllowed(move))
 }
 
-function moveIsAllowed(move: PieceMove): (legalMove: LegalPieceMove) => boolean {
-  return legalMove => legalMove.xOffset === move.xOffset
-    && legalMove.yOffset === move.yOffset
-    && legalMove.legalScenarios.has(move.scenario)
+function moveIsAllowed({offset, scenario}: PieceMove): (legalMove: LegalPieceMove) => boolean {
+  return legalMove => legalMove.xOffset === offset.xOffset
+    && legalMove.yOffset === offset.yOffset
+    && legalMove.legalScenarios.has(scenario)
 }
 
 function isMoveWithinBoard(piece: Piece, move: PieceMove, boardSize: number): boolean {
   const {position: {x, y}} = piece
-  const {xOffset, yOffset} = move
+  const {offset: {xOffset, yOffset}} = move
   return x + xOffset >= 0 && x + xOffset < boardSize
     && y + yOffset >= 0 && y + yOffset < boardSize
 }

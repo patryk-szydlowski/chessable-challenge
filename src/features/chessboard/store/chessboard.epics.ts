@@ -83,8 +83,10 @@ export const movePieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
     const isCaptureMove = !!pieceOnDestination && pieceOnDestination.color !== piece.color
 
     const move: PieceMove = {
-      xOffset: movePosition.x - piece.position.x,
-      yOffset: movePosition.y - piece.position.y,
+      offset: {
+        xOffset: movePosition.x - piece.position.x,
+        yOffset: movePosition.y - piece.position.y,
+      },
       scenario: isCaptureMove
         ? PieceMoveScenario.CAPTURE
         : piece.specialStates.has(PieceSpecialState.FIRST_MOVE)
