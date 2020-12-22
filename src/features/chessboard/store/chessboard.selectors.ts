@@ -82,14 +82,14 @@ export const selectLegalMovePositions = createSelector(
         .map(legalMove => ({
             legalMove,
             pieceAtPosition: pieceByPositionSelector({
-              x: selectedPiece.position.x + legalMove.xOffset,
-              y: selectedPiece.position.y + legalMove.yOffset
+              x: selectedPiece.position.x + legalMove.offset.xOffset,
+              y: selectedPiece.position.y + legalMove.offset.yOffset
             })
           })
         )
         .filter(({pieceAtPosition}) => !pieceAtPosition || pieceAtPosition.color !== selectedPiece.color)
-        .map<PieceMove>(({legalMove: {xOffset, yOffset}, pieceAtPosition}) => ({
-          offset: {xOffset, yOffset},
+        .map<PieceMove>(({legalMove: {offset}, pieceAtPosition}) => ({
+          offset,
           scenario: !!pieceAtPosition
             ? PieceMoveScenario.CAPTURE
             : selectedPiece.specialStates.has(PieceSpecialState.FIRST_MOVE)

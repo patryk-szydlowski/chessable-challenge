@@ -6,26 +6,22 @@ import {
 } from "features/piece/types"
 
 const firstMove: LegalPieceMove = {
-  xOffset: 0,
-  yOffset: 1,
+  offset: {xOffset: 0, yOffset: 1},
   legalScenarios: Set([PieceMoveScenario.MOVE, PieceMoveScenario.FIRST_MOVE])
 }
 
 const move: LegalPieceMove = {
-  xOffset: 0,
-  yOffset: 2,
+  offset: {xOffset: 0, yOffset: 2},
   legalScenarios: Set([PieceMoveScenario.FIRST_MOVE])
 }
 
 const rightSideCapture: LegalPieceMove = {
-  xOffset: 1,
-  yOffset: 1,
+  offset: {xOffset: 1, yOffset: 1},
   legalScenarios: Set([PieceMoveScenario.CAPTURE])
 }
 
 const leftSideCapture: LegalPieceMove = {
-  xOffset: -1,
-  yOffset: 1,
+  offset: {xOffset: -1, yOffset: 1},
   legalScenarios: Set([PieceMoveScenario.CAPTURE])
 }
 
@@ -42,7 +38,10 @@ function offsetByPawnColor(color: PieceColor): (move: LegalPieceMove) => LegalPi
       case PieceColor.WHITE:
         return move
       case PieceColor.BLACK:
-        return {...move, yOffset: -move.yOffset}
+        return {
+          ...move,
+          offset: {...move.offset, yOffset: -move.offset.yOffset}
+        }
     }
   }
 }
