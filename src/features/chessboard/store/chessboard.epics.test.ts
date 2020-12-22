@@ -94,7 +94,11 @@ describe("chessboard epics", () => {
       const actions$ = actions(context.hot("a", {a: spawnPiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot("a", {a: spawnPiece.failure({})})
+      const expected = context.hot("a", {
+        a: spawnPiece.failure({
+          message: "Position 1-1 is occupied"
+        })
+      })
 
       // when
       const result = spawnPieceEpic(actions$, state$, {})
@@ -185,7 +189,11 @@ describe("chessboard epics", () => {
       const actions$ = actions(context.hot("a", {a: spawnPieceAtRandomPosition.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot("a", {a: spawnPieceAtRandomPosition.failure({})})
+      const expected = context.hot("a", {
+        a: spawnPieceAtRandomPosition.failure({
+          message: "There is no space left to spawn a new piece"
+        })
+      })
 
       // when
       const result = spawnPieceAtRandomPositionEpic(actions$, state$, {})
@@ -341,7 +349,11 @@ describe("chessboard epics", () => {
       const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot("a", {a: movePiece.failure({})})
+      const expected = context.hot("a", {
+        a: movePiece.failure({
+          message: "Piece does not exist"
+        })
+      })
 
       // when
       const result = movePieceEpic(actions$, state$, {})
@@ -372,7 +384,11 @@ describe("chessboard epics", () => {
       const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot("a", {a: movePiece.failure({})})
+      const expected = context.hot("a", {
+        a: movePiece.failure({
+          message: "Move is illegal"
+        })
+      })
 
       // when
       const result = movePieceEpic(actions$, state$, {})
@@ -414,7 +430,11 @@ describe("chessboard epics", () => {
       const actions$ = actions(context.hot("a", {a: movePiece.request(payload)}))
       const state$ = state(of(slice))
 
-      const expected = context.hot("a", {a: movePiece.failure({})})
+      const expected = context.hot("a", {
+        a: movePiece.failure({
+          message: "Move position is occupied by another piece"
+        })
+      })
 
       // when
       const result = movePieceEpic(actions$, state$, {})

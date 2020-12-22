@@ -6,6 +6,7 @@ import {
   resetBoard,
   selectPiece,
   spawnPiece,
+  spawnPieceAtRandomPosition,
   unselectPiece
 } from "./chessboard.actions"
 import {initialState} from "./chessboard.state"
@@ -34,3 +35,11 @@ export const chessboardReducer = createReducer<ChessboardState, Action>(initialS
     selectedPieceId: undefined
   }))
   .handleAction(resetBoard, () => initialState)
+  .handleAction([
+    spawnPiece.failure,
+    spawnPieceAtRandomPosition.failure,
+    movePiece.failure
+  ], (state, {payload: error}) => ({
+    ...state,
+    error
+  }))

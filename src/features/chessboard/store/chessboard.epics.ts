@@ -46,7 +46,9 @@ export const spawnPieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
           specialStates: Set([PieceSpecialState.FIRST_MOVE])
         }
       })
-      : spawnPiece.failure({})
+      : spawnPiece.failure({
+        message: `Position ${pieceSpawn.position.x}-${pieceSpawn.position.y} is occupied`
+      })
   })
 )
 
@@ -62,7 +64,9 @@ export const spawnPieceAtRandomPositionEpic: ChessboardEpic = (actions$, state$)
         spawnPieceAtRandomPosition.success(),
         spawnPiece.request({...pieceSpawn, position})
       )
-      : of(spawnPieceAtRandomPosition.failure({}))
+      : of(spawnPieceAtRandomPosition.failure({
+        message: "There is no space left to spawn a new piece"
+      }))
   }),
 )
 
@@ -73,7 +77,9 @@ export const movePieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
     const piece = selectPieceById(state)(pieceId)
 
     if (!piece) {
-      return of(movePiece.failure({}))
+      return of(movePiece.failure({
+        message: "Piece does not exist"
+      }))
     }
 
     const boardSize = selectBoardSize(state)
@@ -95,11 +101,15 @@ export const movePieceEpic: ChessboardEpic = (action$, state$) => action$.pipe(
     }
 
     if (!isCaptureMove && !isDestinationPositionEmpty) {
-      return of(movePiece.failure({}))
+      return of(movePiece.failure({
+        message: "Move position is occupied by another piece"
+      }))
     }
 
     if (!isLegalPieceMove(piece, move, boardSize)) {
-      return of(movePiece.failure({}))
+      return of(movePiece.failure({
+        message: "Move is illegal"
+      }))
     }
 
     const movePieceSuccess = movePiece.success({

@@ -1,4 +1,5 @@
 import {Map, Set} from "immutable"
+import {ChessboardError} from "features/chessboard/types"
 import {chessboardState} from "features/chessboard/utils"
 import {
   Piece,
@@ -12,6 +13,7 @@ import {
   resetBoard,
   selectPiece,
   spawnPiece,
+  spawnPieceAtRandomPosition,
   unselectPiece
 } from "./chessboard.actions"
 import {chessboardReducer} from "./chessboard.reducer"
@@ -149,6 +151,26 @@ describe("chessboard reducer", () => {
     const action = resetBoard()
 
     const expectedState = chessboardState(initialState)
+
+    // when
+    const nextState = chessboardReducer(state, action)
+
+    // then
+    expect(nextState).toEqual(expectedState)
+  })
+
+  test.each([
+    ["spawn piece", spawnPiece.failure],
+    ["spawn piece at random location", spawnPieceAtRandomPosition.failure],
+    ["move piece", movePiece.failure]
+  ])("stores error on %s failure action", (_, actionCreator) => {
+    // given
+    const error: ChessboardError = {message: "error message"}
+    const state = chessboardState({})
+
+    const action = actionCreator(error)
+
+    const expectedState = chessboardState({error})
 
     // when
     const nextState = chessboardReducer(state, action)
