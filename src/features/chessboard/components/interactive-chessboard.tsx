@@ -12,7 +12,7 @@ const StyledPositioner = styled.div`
 `
 
 const Spacer = styled.div`
-  height: 5px
+  height: 10px
 `
 
 const StyledInteractiveChessboard = styled.div`
